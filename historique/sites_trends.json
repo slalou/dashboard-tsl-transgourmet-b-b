@@ -1,0 +1,167 @@
+[
+  [
+    "TGT",
+    {
+      "jan": 785,
+      "fev": 1161,
+      "mar": 792,
+      "avr": 819,
+      "total": 3557,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO IDF Valenton",
+    {
+      "jan": 113,
+      "fev": 433,
+      "mar": 212,
+      "avr": 182,
+      "total": 940,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO M\u00e9diterran\u00e9e",
+    {
+      "jan": 101,
+      "fev": 154,
+      "mar": 121,
+      "avr": 153,
+      "total": 529,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Ouest",
+    {
+      "jan": 69,
+      "fev": 150,
+      "mar": 78,
+      "avr": 80,
+      "total": 377,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Nord",
+    {
+      "jan": 73,
+      "fev": 95,
+      "mar": 62,
+      "avr": 52,
+      "total": 282,
+      "trend": "EN BAISSE \u2198\ufe0f"
+    }
+  ],
+  [
+    "TGO Aquitaine",
+    {
+      "jan": 50,
+      "fev": 66,
+      "mar": 84,
+      "avr": 77,
+      "total": 277,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Midi-Pyr\u00e9n\u00e9es",
+    {
+      "jan": 66,
+      "fev": 52,
+      "mar": 63,
+      "avr": 41,
+      "total": 222,
+      "trend": "EN BAISSE \u2198\ufe0f"
+    }
+  ],
+  [
+    "TGO Alpes",
+    {
+      "jan": 78,
+      "fev": 40,
+      "mar": 40,
+      "avr": 40,
+      "total": 198,
+      "trend": "EN BAISSE \u2198\ufe0f"
+    }
+  ],
+  [
+    "TGO Alsace",
+    {
+      "jan": 130,
+      "fev": 15,
+      "mar": 13,
+      "avr": 32,
+      "total": 190,
+      "trend": "EN BAISSE \u2198\ufe0f"
+    }
+  ],
+  [
+    "TGO Rh\u00f4ne",
+    {
+      "jan": 28,
+      "fev": 67,
+      "mar": 54,
+      "avr": 34,
+      "total": 183,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Centre Ouest",
+    {
+      "jan": 24,
+      "fev": 39,
+      "mar": 25,
+      "avr": 54,
+      "total": 142,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Lorraine",
+    {
+      "jan": 20,
+      "fev": 17,
+      "mar": 18,
+      "avr": 32,
+      "total": 87,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Bourgogne",
+    {
+      "jan": 17,
+      "fev": 23,
+      "mar": 13,
+      "avr": 15,
+      "total": 68,
+      "trend": "EN BAISSE \u2198\ufe0f"
+    }
+  ],
+  [
+    "TGO Centre Est",
+    {
+      "jan": 16,
+      "fev": 7,
+      "mar": 7,
+      "avr": 25,
+      "total": 55,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ],
+  [
+    "TGO Rh\u00f4ne Gap",
+    {
+      "jan": 0,
+      "fev": 3,
+      "mar": 2,
+      "avr": 2,
+      "total": 7,
+      "trend": "EN HAUSSE \u2197\ufe0f"
+    }
+  ]
+]

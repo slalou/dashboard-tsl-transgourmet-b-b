@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Master TSL - Monitoring Complet</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 1800px; margin: 0 auto; }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 { font-size: 2.5em; margin-bottom: 5px; }
+        header p { opacity: 0.9; font-size: 1.05em; }
+
+        .summary-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid #667eea;
+        }
+
+        .summary-box h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .summary-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .summary-item h3 {
+            color: #666;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .summary-item .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 20px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 3px solid #667eea;
+            text-align: center;
+        }
+
+        .kpi-label { color: #999; font-size: 0.8em; text-transform: uppercase; margin-bottom: 8px; }
+        .kpi-value { font-size: 2em; font-weight: bold; color: #667eea; }
+        .kpi-subtitle { color: #999; font-size: 0.85em; margin-top: 5px; }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .chart-box h3 { margin-bottom: 15px; color: #333; }
+        .chart-inner { position: relative; height: 300px; }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th { padding: 12px 15px; text-align: left; font-weight: 600; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        tbody tr:hover { background: #f9f9f9; }
+
+        .alert-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .trend-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .trend-up { background: #ffe5e5; color: #c0392b; }
+        .trend-down { background: #e5f7ff; color: #2980b9; }
+        .trend-stable { background: #fff4e5; color: #d68910; }
+
+        .status-critical { color: #dc3545; font-weight: bold; }
+        .status-warning { color: #ffc107; font-weight: bold; }
+        .status-good { color: #28a745; font-weight: bold; }
+
+        footer { text-align: center; color: #999; margin-top: 30px; padding: 20px; }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { min-width: 120px; padding: 10px 15px; font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard Master TSL - Monitoring Complet</h1>
+            <p>Suivi Intégral: Fournisseurs • Produits • Sites • Motifs | Jan-Avril 2026</p>
+        </header>
+
+        <!-- RÉSUMÉ EXÉCUTIF -->
+        <div class="summary-box">
+            <h2>🎯 Résumé Exécutif (4 Mois)</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h3>Total Incidents</h3>
+                    <div class="value">3,226</div>
+                    <p>Jan: 789 | Fév: 822 | Mar: 793 | Avr: 822</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Fournisseurs Problématiques</h3>
+                    <div class="value">62+</div>
+                    <p>Top: COUNTRY FARM FACTORY (1017 incidents)</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Produits Persistants</h3>
+                    <div class="value">81</div>
+                    <p>Présents 3+ mois | Top: Code 317400</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Sites Actifs</h3>
+                    <div class="value">15</div>
+                    <p>Suivi incidents tous les mois</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALERTES CRITIQUES -->
+        <div class="alert-box alert-critical">
+            <strong>🔴 ALERTES CRITIQUES:</strong>
+            <br>• <strong>TGT</strong> (3557 incidents) - EN HAUSSE en Avril
+            <br>• Code <strong>317400</strong> (276 incidents) - PRODUIT À RISQUE
+            <br>• <strong>COUNTRY FARM FACTORY</strong> (1017 incidents) - Fournisseur #1
+            <br>• <strong>LAITERIE DE SAINT MALO</strong> (770 incidents) - Fournisseur #2
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'overview')">📈 Vue Globale</button>
+            <button class="tab-btn" onclick="switchTab(event, 'suppliers')">📦 Fournisseurs</button>
+            <button class="tab-btn" onclick="switchTab(event, 'products')">🛍️ Produits</button>
+            <button class="tab-btn" onclick="switchTab(event, 'sites')">📍 Sites</button>
+            <button class="tab-btn" onclick="switchTab(event, 'motifs')">⚠️ Motifs</button>
+            <button class="tab-btn" onclick="switchTab(event, 'analysis')">📊 Analyse</button>
+        </div>
+
+        <!-- TAB 1: VUE GLOBALE -->
+        <div id="overview" class="tab-content active">
+            <div class="kpi-grid" id="overviewKpis"></div>
+
+            <div class="charts-grid">
+                <div class="chart-box">
+                    <h3>📈 Evolution Incidents (Jan-Avril)</h3>
+                    <div class="chart-inner">
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3>🔴 Top 5 Fournisseurs (Cumulé)</h3>
+                    <div class="chart-inner">
+                        <canvas id="topSuppliersChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3>🛍️ Top 5 Produits (Cumulé)</h3>
+                    <div class="chart-inner">
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3>📍 Top 5 Sites (Cumulé)</h3>
+                    <div class="chart-inner">
+                        <canvas id="topSitesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: FOURNISSEURS -->
+        <div id="suppliers" class="tab-content">
+            <h2>📦 Suivi Fournisseurs - Évolution Incidents</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fournisseur</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suppliersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: PRODUITS -->
+        <div id="products" class="tab-content">
+            <h2>🛍️ Produits Persistants (3+ mois) - Évolution Incidents</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code Produit</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: SITES -->
+        <div id="sites" class="tab-content">
+            <h2>📍 Sites/Plateformes - Évolution Incidents</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Site</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sitesTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 5: MOTIFS -->
+        <div id="motifs" class="tab-content">
+            <h2>⚠️ Motifs de Réclamation - Distribution</h2>
+            <div class="kpi-grid" id="motifKpis"></div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Motif</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>% Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="motifsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 6: ANALYSE -->
+        <div id="analysis" class="tab-content">
+            <h2>📊 Analyse & Tendances Clés</h2>
+            
+            <div class="alert-box">
+                <strong>✅ Amélioration:</strong>
+                <br>• LUCIEN GEORGELIN: 70 → 21 incidents (-70%)
+                <br>• TGO Nord: 73 → 52 incidents (-28%)
+                <br>• TGO Alpes: 78 → 40 incidents (-48%)
+            </div>
+
+            <div class="alert-box alert-critical">
+                <strong>⚠️ Dégradation:</strong>
+                <br>• TGT: 785 → 819 incidents (+4%) - SITE PRINCIPAL
+                <br>• Code 317400: 10 → 11 incidents - Produit instable
+                <br>• Code 403033: 35 → 40 incidents (+14%)
+                <br>• TGO IDF Valenton: 113 → 182 incidents (+61%)
+            </div>
+
+            <div class="alert-box">
+                <strong>🔴 Critiques Persistants:</strong>
+                <br>• COUNTRY FARM FACTORY: 1017 incidents cumulés (31% du total)
+                <br>• LAITERIE DE SAINT MALO: 770 incidents cumulés (24% du total)
+                <br>• 81 produits avec incidents récurrents
+            </div>
+
+            <h3 style="margin-top: 30px; color: #333;">Recommandations</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h3>Court terme (30j)</h3>
+                    <p>• Audit COUNTRY FARM FACTORY<br>• Analyser Code 317400<br>• Plan qualité TGT</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Moyen terme (90j)</h3>
+                    <p>• Diversifier fournisseurs<br>• Renforcer contrôles<br>• Former équipes</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Long terme (6m+)</h3>
+                    <p>• SLA renégociés<br>• Amélioration continue<br>• Système alerte précoce</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Dashboard Master TSL v1.0 | Données: Jan-Avril 2026 | Mise à jour: Avril 2026</p>
+            <p>Focus: Évolution des Incidents (pas taux service) | Tendances sur 4 mois</p>
+        </footer>
+    </div>
+
+    <script>
+        const supplierData = {
+            'COUNTRY FARM FACTORY': { jan: 222, fev: 200, mar: 320, avr: 275 },
+            'LAITERIE DE SAINT MALO': { jan: 215, fev: 215, mar: 180, avr: 160 },
+            'LUCIEN GEORGELIN': { jan: 70, fev: 7, mar: 14, avr: 21 },
+            'SPEIR FL STOCK ET ALLOTI': { jan: 38, fev: 48, mar: 47, avr: 36 },
+            'FAMILLE MICHAUD APICULTEURS': { jan: 5, fev: 1, mar: 2, avr: 6 }
+        };
+
+        const productData = {
+            317400: { jan: 10, fev: 96, mar: 159, avr: 11 },
+            252682: { jan: 57, fev: 0, mar: 121, avr: 2 },
+            432241: { jan: 24, fev: 69, mar: 28, avr: 23 },
+            317398: { jan: 63, fev: 55, mar: 17, avr: 5 },
+            403033: { jan: 35, fev: 18, mar: 35, avr: 40 }
+        };
+
+        const siteData = {
+            'TGT': { jan: 785, fev: 1161, mar: 792, avr: 819 },
+            'TGO IDF Valenton': { jan: 113, fev: 433, mar: 212, avr: 182 },
+            'TGO Méditerranée': { jan: 101, fev: 154, mar: 121, avr: 153 },
+            'TGO Ouest': { jan: 69, fev: 150, mar: 78, avr: 80 },
+            'TGO Nord': { jan: 73, fev: 95, mar: 62, avr: 52 }
+        };
+
+        const motifData = {
+            'Fournisseur': { jan: 167, fev: 309, mar: 379, avr: 150 },
+            'Erreur sur mercuriale clients': { jan: 193, fev: 80, mar: 70, avr: 60 },
+            'ERREUR PREP ROLL': { jan: 100, fev: 110, mar: 120, avr: 115 }
+        };
+
+        let trendsChart, topSuppliersChart, topProductsChart, topSitesChart;
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'overview') initOverview();
+            else if (tabName === 'suppliers') initSuppliers();
+            else if (tabName === 'products') initProducts();
+            else if (tabName === 'sites') initSites();
+            else if (tabName === 'motifs') initMotifs();
+        }
+
+        function getTrend(values) {
+            if (values[3] > values[0]) return { text: '↗️ HAUSSE', class: 'trend-up' };
+            if (values[3] < values[0]) return { text: '↘️ BAISSE', class: 'trend-down' };
+            return { text: '➡️ STABLE', class: 'trend-stable' };
+        }
+
+        function getStatus(incidents) {
+            if (incidents > 100) return '<span class="status-critical">🔴 Critique</span>';
+            if (incidents > 50) return '<span class="status-warning">🟠 À surveiller</span>';
+            return '<span class="status-good">✅ OK</span>';
+        }
+
+        function initOverview() {
+            const kpis = document.getElementById('overviewKpis');
+            kpis.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Janvier</div>
+                    <div class="kpi-value">789</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Février</div>
+                    <div class="kpi-value">822</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Mars</div>
+                    <div class="kpi-value">793</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Avril</div>
+                    <div class="kpi-value">822</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total (4 mois)</div>
+                    <div class="kpi-value">3,226</div>
+                </div>
+            `;
+
+            initCharts();
+        }
+
+        function initCharts() {
+            // Chart 1: Tendances
+            const ctx1 = document.getElementById('trendsChart').getContext('2d');
+            if (trendsChart) trendsChart.destroy();
+            trendsChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Janvier', 'Février', 'Mars', 'Avril'],
+                    datasets: [{
+                        label: 'Total Incidents',
+                        data: [789, 822, 793, 822],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+
+            // Chart 2: Top Fournisseurs
+            const ctx2 = document.getElementById('topSuppliersChart').getContext('2d');
+            if (topSuppliersChart) topSuppliersChart.destroy();
+            topSuppliersChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['COUNTRY FARM', 'LAITERIE STM', 'LUCIEN GEORG.', 'SPEIR FL', 'FAMILLE MICHAUD'],
+                    datasets: [{ label: 'Incidents', data: [1017, 770, 112, 169, 14], backgroundColor: '#667eea' }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Chart 3: Top Produits
+            const ctx3 = document.getElementById('topProductsChart').getContext('2d');
+            if (topProductsChart) topProductsChart.destroy();
+            topProductsChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: ['Code 317400', 'Code 252682', 'Code 432241', 'Code 317398', 'Code 403033'],
+                    datasets: [{ label: 'Incidents', data: [276, 180, 144, 140, 128], backgroundColor: '#f39c12' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Chart 4: Top Sites
+            const ctx4 = document.getElementById('topSitesChart').getContext('2d');
+            if (topSitesChart) topSitesChart.destroy();
+            topSitesChart = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: ['TGT', 'TGO IDF Val.', 'TGO Médit.', 'TGO Ouest', 'TGO Nord'],
+                    datasets: [{ label: 'Incidents', data: [3557, 940, 529, 377, 282], backgroundColor: '#e74c3c' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function initSuppliers() {
+            const tbody = document.getElementById('suppliersTable');
+            tbody.innerHTML = '';
+            
+            for (const [name, data] of Object.entries(supplierData)) {
+                const total = data.jan + data.fev + data.mar + data.avr;
+                const trend = getTrend([data.jan, data.fev, data.mar, data.avr]);
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${name}</strong></td>
+                        <td>${data.jan}</td>
+                        <td>${data.fev}</td>
+                        <td>${data.mar}</td>
+                        <td>${data.avr}</td>
+                        <td><strong>${total}</strong></td>
+                        <td><span class="trend-badge ${trend.class}">${trend.text}</span></td>
+                        <td>${getStatus(total)}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        function initProducts() {
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = '';
+            
+            for (const [code, data] of Object.entries(productData)) {
+                const total = data.jan + data.fev + data.mar + data.avr;
+                const trend = getTrend([data.jan, data.fev, data.mar, data.avr]);
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>Code ${code}</strong></td>
+                        <td>${data.jan}</td>
+                        <td>${data.fev}</td>
+                        <td>${data.mar}</td>
+                        <td>${data.avr}</td>
+                        <td><strong>${total}</strong></td>
+                        <td><span class="trend-badge ${trend.class}">${trend.text}</span></td>
+                    </tr>
+                `;
+            }
+        }
+
+        function initSites() {
+            const tbody = document.getElementById('sitesTable');
+            tbody.innerHTML = '';
+            
+            for (const [site, data] of Object.entries(siteData)) {
+                const total = data.jan + data.fev + data.mar + data.avr;
+                const trend = getTrend([data.jan, data.fev, data.mar, data.avr]);
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${site}</strong></td>
+                        <td>${data.jan}</td>
+                        <td>${data.fev}</td>
+                        <td>${data.mar}</td>
+                        <td>${data.avr}</td>
+                        <td><strong>${total}</strong></td>
+                        <td><span class="trend-badge ${trend.class}">${trend.text}</span></td>
+                        <td>${getStatus(data.avr)}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        function initMotifs() {
+            const kpis = document.getElementById('motifKpis');
+            const totalIncidents = 3226;
+            kpis.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-label">Motif #1</div>
+                    <div class="kpi-value">Fournisseur</div>
+                    <div class="kpi-subtitle">1005 incidents (31%)</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Motif #2</div>
+                    <div class="kpi-value">Mercuriale</div>
+                    <div class="kpi-subtitle">403 incidents (12%)</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Motif #3</div>
+                    <div class="kpi-value">ERREUR PREP</div>
+                    <div class="kpi-subtitle">445 incidents (13%)</div>
+                </div>
+            `;
+
+            const tbody = document.getElementById('motifsTable');
+            tbody.innerHTML = '';
+            
+            for (const [motif, data] of Object.entries(motifData)) {
+                const total = data.jan + data.fev + data.mar + data.avr;
+                const percent = ((total / totalIncidents) * 100).toFixed(1);
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${motif}</strong></td>
+                        <td>${data.jan}</td>
+                        <td>${data.fev}</td>
+                        <td>${data.mar}</td>
+                        <td>${data.avr}</td>
+                        <td><strong>${total}</strong></td>
+                        <td><strong>${percent}%</strong></td>
+                    </tr>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initOverview);
+    </script>
+</body>
+</html>

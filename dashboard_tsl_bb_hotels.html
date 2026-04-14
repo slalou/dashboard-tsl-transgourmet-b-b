@@ -54,10 +54,9 @@
             padding: 10px;
         }
 
-        .logo-box img {
+        .logo-box svg {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain;
         }
 
         header h1 { 
@@ -383,11 +382,19 @@
         <header>
             <div class="header-logo">
                 <div class="logo-box">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logotype_bb_hotels.svg/200px-Logotype_bb_hotels.svg.png" alt="B&B Hotels" onerror="this.style.display='none'">
-                    <span style="color: #003580; font-weight: bold; font-size: 12px;" id="bbLogoFallback">B&B HOTELS</span>
+                    <svg viewBox="0 0 200 100" style="width: 110px; height: 60px;">
+                        <!-- B&B Hotels Logo Style -->
+                        <rect width="200" height="100" fill="#003580" rx="5"/>
+                        <text x="100" y="60" text-anchor="middle" font-size="40" font-weight="bold" fill="white" font-family="Arial">B&B</text>
+                    </svg>
                 </div>
                 <div class="logo-box">
-                    <span style="color: #003580; font-weight: bold; font-size: 12px; text-align: center;">🍽️<br>TRANSGOURMET</span>
+                    <svg viewBox="0 0 200 100" style="width: 110px; height: 60px;">
+                        <!-- Transgourmet Logo Style -->
+                        <rect width="200" height="100" fill="#FFB81C" rx="5"/>
+                        <text x="100" y="35" text-anchor="middle" font-size="14" font-weight="bold" fill="#003580" font-family="Arial">TRANS</text>
+                        <text x="100" y="60" text-anchor="middle" font-size="14" font-weight="bold" fill="#003580" font-family="Arial">GOURMET</text>
+                    </svg>
                 </div>
             </div>
             <div class="header-content">
@@ -918,18 +925,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Masquer fallback si logo chargé
-            const img = document.querySelector('.logo-box img');
-            if (img && img.complete && img.naturalHeight !== 0) {
-                document.getElementById('bbLogoFallback').style.display = 'none';
-            }
-            img?.addEventListener('load', () => {
-                document.getElementById('bbLogoFallback').style.display = 'none';
-            });
-            
-            refreshDisplay();
-        });
+        document.addEventListener('DOMContentLoaded', refreshDisplay);
     </script>
 </body>
 </html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard TSL Complet - B&B Hotels / Transgourmet</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.05em;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ddd;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* KPI Cards */
+        .kpis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid #667eea;
+        }
+
+        .kpi-card h3 {
+            color: #999;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .kpi-subtitle {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .chart-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .chart-inner {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Status badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .badge.good {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge.danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        /* List items */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item-name {
+            flex: 1;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .list-item-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: #999;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .tabs-container {
+                flex-wrap: wrap;
+            }
+
+            .tab-button {
+                flex: 1 1 calc(50% - 5px);
+            }
+
+            .kpis-grid, .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+
+        .metric-bar {
+            display: inline-block;
+            height: 6px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+            min-width: 100px;
+        }
+
+        .bar-good { background: #27ae60; }
+        .bar-warning { background: #f39c12; }
+        .bar-danger { background: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard TSL Complet</h1>
+            <p>Transgourmet - Indicateurs Qualité Globaux | Mars 2026</p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-button active" onclick="switchTab('overview')">📈 Vue Globale</button>
+            <button class="tab-button" onclick="switchTab('sites')">🏨 Par Site</button>
+            <button class="tab-button" onclick="switchTab('products')">📦 Produits</button>
+            <button class="tab-button" onclick="switchTab('clients')">👥 Clients/Hôtels</button>
+            <button class="tab-button" onclick="switchTab('issues')">⚠️ Réclamations</button>
+        </div>
+
+        <!-- TAB 1: Vue Globale -->
+        <div id="overview" class="tab-content active">
+            <div class="kpis-grid" id="overviewKpis"></div>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Distribution des Incidents par Motif</h3>
+                    <div class="chart-inner">
+                        <canvas id="chartMotifs"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>Top Produits (par incidents)</h3>
+                    <div class="chart-inner">
+                        <canvas id="chartTopProducts"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Par Site -->
+        <div id="sites" class="tab-content">
+            <div id="sitesKpis" class="kpis-grid"></div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Site</th>
+                            <th>Livraisons</th>
+                            <th>Lignes Commandées</th>
+                            <th>Incidents</th>
+                            <th>Taux Service</th>
+                            <th>Taux Avoir</th>
+                            <th>Taux VM</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sitesTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: Produits -->
+        <div id="products" class="tab-content">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Filtrer par catégorie:</label>
+                    <select id="categoryFilter" onchange="filterProductsByCategory()">
+                        <option value="">Tous</option>
+                        <option value="FRAIS">Frais</option>
+                        <option value="EPICERIE">Épicerie</option>
+                        <option value="AMBIANT">Ambiant</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Produit</th>
+                            <th>Catégorie</th>
+                            <th>Mode Gestion</th>
+                            <th>Total Incidents</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: Clients/Hôtels -->
+        <div id="clients" class="tab-content">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Rechercher client:</label>
+                    <input type="text" id="clientSearch" placeholder="Nom hôtel..." onkeyup="filterClients()">
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Site</th>
+                            <th>Ville</th>
+                            <th>Lignes Commandées</th>
+                            <th>Incidents</th>
+                            <th>Taux Service</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 5: Réclamations -->
+        <div id="issues" class="tab-content">
+            <div class="kpis-grid" id="issuesKpis"></div>
+            <div class="table-container">
+                <div style="padding: 20px;">
+                    <h3 style="margin-bottom: 20px; color: #333;">Détail des Motifs de Réclamation</h3>
+                    <div id="motifsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Édition du 07/04/26 | Période: 01/03/26 au 31/03/26 | Données Transgourmet SOFIBR</p>
+        </footer>
+    </div>
+
+    <script>
+        // Données complètes
+        const sitesData = [
+            {"site":"TGT","deliveries":2874,"lines_ordered":47410,"lines_with_incidents":819,"service_rate":0.982725163467623,"credit_rate":0.00995570554735288,"vm_rate":0.00731913098502426},
+            {"site":"TGO Alpes","deliveries":82,"lines_ordered":1359,"lines_with_incidents":40,"service_rate":0.970566593083149,"credit_rate":0.013980868285504,"vm_rate":0.0154525386313466},
+            {"site":"TGO Alsace","deliveries":123,"lines_ordered":1730,"lines_with_incidents":32,"service_rate":0.98150289017341,"credit_rate":0.0109826589595376,"vm_rate":0.00751445086705202},
+            {"site":"TGO Aquitaine","deliveries":217,"lines_ordered":3299,"lines_with_incidents":77,"service_rate":0.976659593816308,"credit_rate":0.0118217641709609,"vm_rate":0.0115186420127311},
+            {"site":"TGO Bourgogne","deliveries":88,"lines_ordered":1360,"lines_with_incidents":15,"service_rate":0.988970588235294,"credit_rate":0.00882352941176471,"vm_rate":0.00220588235294118},
+            {"site":"TGO Bretagne","deliveries":189,"lines_ordered":2738,"lines_with_incidents":38,"service_rate":0.986125908143069,"credit_rate":0.0087738589211619,"vm_rate":0.0201613126614987},
+            {"site":"TGO Côte d'Azur","deliveries":74,"lines_ordered":1143,"lines_with_incidents":14,"service_rate":0.987754433434397,"credit_rate":0.00612244665563604,"vm_rate":0.00437636761487575},
+            {"site":"TGO Île-de-France","deliveries":322,"lines_ordered":4843,"lines_with_incidents":76,"service_rate":0.984310698224852,"credit_rate":0.00826446280991736,"vm_rate":0.00989408297680098},
+            {"site":"TGO Languedoc","deliveries":101,"lines_ordered":1459,"lines_with_incidents":24,"service_rate":0.983549689371827,"credit_rate":0.00687049344129332,"vm_rate":0.00684027825529404},
+            {"site":"TGO Limousin","deliveries":79,"lines_ordered":1163,"lines_with_incidents":11,"service_rate":0.990543735224586,"credit_rate":0.00863438256335098,"vm_rate":0.0},
+            {"site":"TGO Lorraine","deliveries":104,"lines_ordered":1594,"lines_with_incidents":18,"service_rate":0.98870831216931,"credit_rate":0.0094211618387392,"vm_rate":0.00125786163522012},
+            {"site":"TGO Lyon","deliveries":134,"lines_ordered":2044,"lines_with_incidents":31,"service_rate":0.984837814945185,"credit_rate":0.00931899641577061,"vm_rate":0.00539419087136929},
+            {"site":"TGO Nord","deliveries":96,"lines_ordered":1472,"lines_with_incidents":21,"service_rate":0.985788816430206,"credit_rate":0.0110652340869825,"vm_rate":0.0102380952380952},
+            {"site":"TGO Normandie","deliveries":85,"lines_ordered":1283,"lines_with_incidents":17,"service_rate":0.986735870915032,"credit_rate":0.0078393574297188,"vm_rate":0.00390625},
+            {"site":"TGO Picardie","deliveries":72,"lines_ordered":1090,"lines_with_incidents":14,"service_rate":0.987155963302752,"credit_rate":0.00733944954128441,"vm_rate":0.00917431192660551}
+        ];
+
+        const productsData = [
+            {"code":317397,"name":"INFUSION TILLEUL MENT. X25*BIO","tac":6,"category":"AMBIANT","mode":"Sur Stock","total":30},
+            {"code":209374,"name":"MADELEINE S/GLUTEN 30G X45","tac":1,"category":"AMBIANT","mode":"Sur Stock","total":23},
+            {"code":257545,"name":"GRANOLA NAT.S/GLUTEN 500G *BIO","tac":6,"category":"AMBIANT","mode":"Sur Stock","total":22},
+            {"code":403033,"name":"FROM.FRAIS 1/2 SEL 25 G X24","tac":6,"category":"FRAIS","mode":"Pré-Commande","total":22},
+            {"code":311569,"name":"EMMENTAL FR.TR.BURGER 29% 340G","tac":3,"category":"FRAIS","mode":"Sur Stock","total":20},
+            {"code":301231,"name":"SALADE 4 FRUITS 3L","tac":1,"category":"FRAIS","mode":"Sur Stock","total":18},
+            {"code":239283,"name":"YAOURT FRUIT 125G X8","tac":4,"category":"FRAIS","mode":"Sur Stock","total":15},
+            {"code":401284,"name":"BEURRE DOUX 250G","tac":3,"category":"FRAIS","mode":"Sur Stock","total":14},
+        ];
+
+        const motifsData = [
+            {"motif":"Fournisseur","count":30},
+            {"motif":"Tendance hausse","count":11},
+            {"motif":"Commerce EDI","count":6},
+            {"motif":"Appro. Armement","count":5},
+            {"motif":"Régul. Entr.","count":5},
+            {"motif":"Appro.","count":2},
+            {"motif":"Entrepôt","count":1},
+            {"motif":"Qte Ano.","count":1},
+        ];
+
+        const clientsData = [
+            {"site":"TGO Rhône Gap","client_code":"1349460","client_name":"HOTEL BB GAP","city":"GAP","lines_ordered":47,"lines_credit":0,"lines_missing":2,"service_rate":0.957446808510638},
+            {"site":"TGO Rhône","client_code":"1077479","client_name":"HOTEL B&B TASSIN LA DEMI LUNE","city":"TASSIN LA DEMI-LUNE","lines_ordered":119,"lines_credit":3,"lines_missing":0,"service_rate":0.974789915966387},
+            {"site":"TGO Rhône","client_code":"108269","client_name":"B&B HOTELS","city":"MEYZIEU","lines_ordered":110,"lines_credit":0,"lines_missing":0,"service_rate":1.0},
+            {"site":"TGO Rhône","client_code":"48621","client_name":"HOTEL B & B ST PRIEST","city":"SAINT PRIEST","lines_ordered":66,"lines_credit":0,"lines_missing":0,"service_rate":1.0},
+            {"site":"TGO Rhône","client_code":"1062182","client_name":"B&B CHASSIEU  - FIMH","city":"CHASSIEU","lines_ordered":78,"lines_credit":1,"lines_missing":0,"service_rate":0.987179487179487},
+            {"site":"TGO Rhône","client_code":"1272863","client_name":"B&B LYON BRON EUREXPO","city":"BRON","lines_ordered":136,"lines_credit":1,"lines_missing":0,"service_rate":0.992647058823529},
+        ];
+
+        function formatPercent(value) {
+            return (value * 100).toFixed(2) + '%';
+        }
+
+        function formatNumber(value) {
+            return new Intl.NumberFormat('fr-FR').format(value);
+        }
+
+        function switchTab(tabName) {
+            // Masquer tous les onglets
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+
+            // Afficher l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Initialiser les graphiques si nécessaire
+            if (tabName === 'overview') {
+                setTimeout(() => {
+                    initCharts();
+                }, 100);
+            }
+        }
+
+        function initOverview() {
+            const container = document.getElementById('overviewKpis');
+            container.innerHTML = '';
+
+            // Calculs globaux
+            const totalDeliveries = sitesData.reduce((sum, s) => sum + s.deliveries, 0);
+            const totalLines = sitesData.reduce((sum, s) => sum + s.lines_ordered, 0);
+            const totalIncidents = sitesData.reduce((sum, s) => sum + s.lines_with_incidents, 0);
+            const avgService = sitesData.reduce((sum, s) => sum + s.service_rate, 0) / sitesData.length;
+            const totalClients = clientsData.length;
+            const totalProducts = productsData.length;
+
+            const kpis = [
+                {title: 'Sites Actifs', value: sitesData.length, subtitle: 'Centres de distribution'},
+                {title: 'Taux Service Global', value: formatPercent(avgService), subtitle: 'Performance moyenne'},
+                {title: 'Total Lignes Commandées', value: formatNumber(totalLines), subtitle: 'Mars 2026'},
+                {title: 'Taux Incidents Global', value: formatPercent(totalIncidents / totalLines), subtitle: totalIncidents + ' incidents'},
+                {title: 'Clients Desservis', value: totalClients, subtitle: 'Hôtels B&B'},
+                {title: 'Références Produits', value: totalProducts, subtitle: 'Produits gérés'},
+            ];
+
+            kpis.forEach(kpi => {
+                const card = document.createElement('div');
+                card.className = 'kpi-card';
+                card.innerHTML = `
+                    <h3>${kpi.title}</h3>
+                    <div class="kpi-value">${kpi.value}</div>
+                    <div class="kpi-subtitle">${kpi.subtitle}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function initSites() {
+            const container = document.getElementById('sitesTable');
+            container.innerHTML = '';
+
+            sitesData.forEach(site => {
+                const incidentRate = (site.lines_with_incidents / site.lines_ordered) * 100;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${site.site}</td>
+                    <td>${formatNumber(site.deliveries)}</td>
+                    <td>${formatNumber(site.lines_ordered)}</td>
+                    <td>${formatNumber(site.lines_with_incidents)}</td>
+                    <td><span class="badge ${site.service_rate >= 0.985 ? 'good' : site.service_rate >= 0.97 ? 'warning' : 'danger'}">${formatPercent(site.service_rate)}</span></td>
+                    <td>${formatPercent(site.credit_rate)}</td>
+                    <td>${formatPercent(site.vm_rate)}</td>
+                `;
+                container.appendChild(row);
+            });
+
+            // KPIs pour les sites
+            const sitesKpis = document.getElementById('sitesKpis');
+            const bestService = sitesData.reduce((a, b) => a.service_rate > b.service_rate ? a : b);
+            const worstService = sitesData.reduce((a, b) => a.service_rate < b.service_rate ? a : b);
+
+            sitesKpis.innerHTML = `
+                <div class="kpi-card">
+                    <h3>Meilleur Taux</h3>
+                    <div class="kpi-value">${bestService.site}</div>
+                    <div class="kpi-subtitle">${formatPercent(bestService.service_rate)}</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>À Améliorer</h3>
+                    <div class="kpi-value">${worstService.site}</div>
+                    <div class="kpi-subtitle">${formatPercent(worstService.service_rate)}</div>
+                </div>
+            `;
+        }
+
+        function initProducts() {
+            const container = document.getElementById('productsTable');
+            container.innerHTML = '';
+
+            productsData.forEach(prod => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${prod.code}</td>
+                    <td>${prod.name}</td>
+                    <td><span class="badge">${prod.category}</span></td>
+                    <td>${prod.mode}</td>
+                    <td style="color: #667eea; font-weight: bold;">${prod.total}</td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function filterProductsByCategory() {
+            const category = document.getElementById('categoryFilter').value;
+            const container = document.getElementById('productsTable');
+            container.innerHTML = '';
+
+            const filtered = category ? productsData.filter(p => p.category === category) : productsData;
+
+            filtered.forEach(prod => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${prod.code}</td>
+                    <td>${prod.name}</td>
+                    <td><span class="badge">${prod.category}</span></td>
+                    <td>${prod.mode}</td>
+                    <td style="color: #667eea; font-weight: bold;">${prod.total}</td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function initClients() {
+            const container = document.getElementById('clientsTable');
+            container.innerHTML = '';
+
+            clientsData.forEach(client => {
+                const row = document.createElement('tr');
+                const serviceRate = client.service_rate || 0;
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${client.client_name}</td>
+                    <td>${client.site}</td>
+                    <td>${client.city}</td>
+                    <td>${client.lines_ordered}</td>
+                    <td>${client.lines_missing + (client.lines_credit || 0)}</td>
+                    <td><span class="badge ${serviceRate >= 0.98 ? 'good' : 'warning'}">${formatPercent(serviceRate)}</span></td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function filterClients() {
+            const search = document.getElementById('clientSearch').value.toLowerCase();
+            const container = document.getElementById('clientsTable');
+            container.innerHTML = '';
+
+            const filtered = clientsData.filter(c => c.client_name.toLowerCase().includes(search) || c.city.toLowerCase().includes(search));
+
+            filtered.forEach(client => {
+                const row = document.createElement('tr');
+                const serviceRate = client.service_rate || 0;
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${client.client_name}</td>
+                    <td>${client.site}</td>
+                    <td>${client.city}</td>
+                    <td>${client.lines_ordered}</td>
+                    <td>${client.lines_missing + (client.lines_credit || 0)}</td>
+                    <td><span class="badge ${serviceRate >= 0.98 ? 'good' : 'warning'}">${formatPercent(serviceRate)}</span></td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function initIssues() {
+            // KPIs
+            const issuesKpis = document.getElementById('issuesKpis');
+            const totalIssues = motifsData.reduce((sum, m) => sum + m.count, 0);
+            const topMotif = motifsData[0];
+
+            issuesKpis.innerHTML = `
+                <div class="kpi-card">
+                    <h3>Total Réclamations</h3>
+                    <div class="kpi-value">${totalIssues}</div>
+                    <div class="kpi-subtitle">Motifs identifiés</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Principal Motif</h3>
+                    <div class="kpi-value">${topMotif.motif}</div>
+                    <div class="kpi-subtitle">${topMotif.count} incidents</div>
+                </div>
+            `;
+
+            // Liste des motifs
+            const motifsList = document.getElementById('motifsList');
+            motifsList.innerHTML = '';
+
+            motifsData.forEach(motif => {
+                const percent = (motif.count / totalIssues * 100).toFixed(1);
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class="list-item-name">
+                        <span class="metric-bar bar-danger"></span>${motif.motif}
+                    </div>
+                    <div style="text-align: center; min-width: 150px;">
+                        <div style="font-weight: bold; color: #667eea;">${motif.count}</div>
+                        <div style="font-size: 0.85em; color: #999;">${percent}%</div>
+                    </div>
+                `;
+                motifsList.appendChild(item);
+            });
+        }
+
+        let chartsInitialized = false;
+
+        function initCharts() {
+            if (chartsInitialized) return;
+            chartsInitialized = true;
+
+            // Chart 1: Motifs
+            const ctxMotifs = document.getElementById('chartMotifs').getContext('2d');
+            new Chart(ctxMotifs, {
+                type: 'doughnut',
+                data: {
+                    labels: motifsData.map(m => m.motif),
+                    datasets: [{
+                        data: motifsData.map(m => m.count),
+                        backgroundColor: ['#667eea', '#764ba2', '#f39c12', '#e74c3c', '#27ae60', '#3498db', '#9b59b6', '#1abc9c'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Chart 2: Top Produits
+            const ctxProducts = document.getElementById('chartTopProducts').getContext('2d');
+            const topProducts = productsData.slice(0, 8);
+            new Chart(ctxProducts, {
+                type: 'bar',
+                data: {
+                    labels: topProducts.map(p => p.name.substring(0, 20) + '...'),
+                    datasets: [{
+                        label: 'Incidents',
+                        data: topProducts.map(p => p.total),
+                        backgroundColor: '#667eea',
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            initOverview();
+            initSites();
+            initProducts();
+            initClients();
+            initIssues();
+        });
+    </script>
+</body>
+</html>

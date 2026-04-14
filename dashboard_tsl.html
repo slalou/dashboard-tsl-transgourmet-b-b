@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard TSL - B&B Hotels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .filters {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-group select {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-group select:hover {
+            border-color: #764ba2;
+            background-color: #f9f9f9;
+        }
+
+        .kpis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+
+        .kpi-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .kpi-subtitle {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        /* Status badges */
+        .status-good { color: #27ae60; }
+        .status-warning { color: #f39c12; }
+        .status-danger { color: #e74c3c; }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        tbody tr.selected {
+            background-color: #e8eef7;
+        }
+
+        .site-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .metric-bar {
+            display: inline-block;
+            height: 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .metric-percent {
+            display: inline-block;
+            min-width: 50px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .bar-good { background-color: #27ae60; }
+        .bar-warning { background-color: #f39c12; }
+        .bar-danger { background-color: #e74c3c; }
+
+        /* Details panel */
+        .details-panel {
+            margin-top: 30px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .details-panel.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            border-left: 3px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .detail-label {
+            color: #999;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .comparison {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+
+        .trend {
+            padding: 5px 10px;
+            border-radius: 3px;
+            background-color: #f0f0f0;
+        }
+
+        .trend.up { color: #27ae60; font-weight: bold; }
+        .trend.down { color: #e74c3c; font-weight: bold; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .kpis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+
+        /* Print friendly */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .filters {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard TSL</h1>
+            <p>Transgourmet - Indicateurs Qualité par Site (Mars 2026)</p>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="siteFilter">Filtrer par site:</label>
+                <select id="siteFilter">
+                    <option value="">-- Tous les sites --</option>
+                </select>
+                <label for="metricFilter">Métrique clé:</label>
+                <select id="metricFilter">
+                    <option value="service_rate">Taux de Service</option>
+                    <option value="lines_ordered">Lignes Commandées</option>
+                    <option value="lines_with_incidents">Incidents</option>
+                    <option value="deliveries">Livraisons</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="kpis-grid" id="kpisContainer">
+            <!-- KPIs seront insérés ici -->
+        </div>
+
+        <div class="table-container">
+            <table id="sitesTable">
+                <thead>
+                    <tr>
+                        <th>Site</th>
+                        <th>Livraisons</th>
+                        <th>Lignes Commandées</th>
+                        <th>Incidents</th>
+                        <th>Taux de Service</th>
+                        <th>Taux Avoir</th>
+                        <th>Taux VM</th>
+                    </tr>
+                </thead>
+                <tbody id="sitesTableBody">
+                    <!-- Lignes du tableau seront insérées ici -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="details-panel" id="detailsPanel">
+            <h2 id="selectedSiteName"></h2>
+            <div class="details-grid" id="detailsGrid">
+                <!-- Détails seront insérés ici -->
+            </div>
+        </div>
+
+        <footer>
+            <p>Édition du 07/04/26 - Données TSL Transgourmet | Période: 01/03/26 au 31/03/26</p>
+        </footer>
+    </div>
+
+    <script>
+        // Données TSL
+        const sitesData = [
+            {"site":"TGT","deliveries":2874,"lines_ordered":47410,"lines_with_incidents":819,"service_rate":0.982725163467623,"credit_rate":0.00995570554735288,"vm_rate":0.00731913098502426},
+            {"site":"TGO Alpes","deliveries":82,"lines_ordered":1359,"lines_with_incidents":40,"service_rate":0.970566593083149,"credit_rate":0.013980868285504,"vm_rate":0.0154525386313466},
+            {"site":"TGO Alsace","deliveries":123,"lines_ordered":1730,"lines_with_incidents":32,"service_rate":0.98150289017341,"credit_rate":0.0109826589595376,"vm_rate":0.00751445086705202},
+            {"site":"TGO Aquitaine","deliveries":217,"lines_ordered":3299,"lines_with_incidents":77,"service_rate":0.976659593816308,"credit_rate":0.0118217641709609,"vm_rate":0.0115186420127311},
+            {"site":"TGO Bourgogne","deliveries":88,"lines_ordered":1360,"lines_with_incidents":15,"service_rate":0.988970588235294,"credit_rate":0.00882352941176471,"vm_rate":0.00220588235294118},
+            {"site":"TGO Bretagne","deliveries":189,"lines_ordered":2738,"lines_with_incidents":38,"service_rate":0.986125908143069,"credit_rate":0.0087738589211619,"vm_rate":0.0201613126614987},
+            {"site":"TGO Côte d'Azur","deliveries":74,"lines_ordered":1143,"lines_with_incidents":14,"service_rate":0.987754433434397,"credit_rate":0.00612244665563604,"vm_rate":0.00437636761487575},
+            {"site":"TGO Île-de-France","deliveries":322,"lines_ordered":4843,"lines_with_incidents":76,"service_rate":0.984310698224852,"credit_rate":0.00826446280991736,"vm_rate":0.00989408297680098},
+            {"site":"TGO Languedoc","deliveries":101,"lines_ordered":1459,"lines_with_incidents":24,"service_rate":0.983549689371827,"credit_rate":0.00687049344129332,"vm_rate":0.00684027825529404},
+            {"site":"TGO Limousin","deliveries":79,"lines_ordered":1163,"lines_with_incidents":11,"service_rate":0.990543735224586,"credit_rate":0.00863438256335098,"vm_rate":0.0},
+            {"site":"TGO Lorraine","deliveries":104,"lines_ordered":1594,"lines_with_incidents":18,"service_rate":0.98870831216931,"credit_rate":0.0094211618387392,"vm_rate":0.00125786163522012},
+            {"site":"TGO Lyon","deliveries":134,"lines_ordered":2044,"lines_with_incidents":31,"service_rate":0.984837814945185,"credit_rate":0.00931899641577061,"vm_rate":0.00539419087136929},
+            {"site":"TGO Nord","deliveries":96,"lines_ordered":1472,"lines_with_incidents":21,"service_rate":0.985788816430206,"credit_rate":0.0110652340869825,"vm_rate":0.0102380952380952},
+            {"site":"TGO Normandie","deliveries":85,"lines_ordered":1283,"lines_with_incidents":17,"service_rate":0.986735870915032,"credit_rate":0.0078393574297188,"vm_rate":0.00390625},
+            {"site":"TGO Picardie","deliveries":72,"lines_ordered":1090,"lines_with_incidents":14,"service_rate":0.987155963302752,"credit_rate":0.00733944954128441,"vm_rate":0.00917431192660551}
+        ];
+
+        let filteredData = [...sitesData];
+
+        function formatPercent(value) {
+            return (value * 100).toFixed(2) + '%';
+        }
+
+        function formatNumber(value) {
+            return new Intl.NumberFormat('fr-FR').format(value);
+        }
+
+        function getServiceStatusClass(rate) {
+            if (rate >= 0.985) return 'status-good';
+            if (rate >= 0.97) return 'status-warning';
+            return 'status-danger';
+        }
+
+        function getBarClass(rate) {
+            if (rate >= 0.985) return 'bar-good';
+            if (rate >= 0.97) return 'bar-warning';
+            return 'bar-danger';
+        }
+
+        function initFilters() {
+            const siteFilter = document.getElementById('siteFilter');
+            sitesData.forEach(site => {
+                const option = document.createElement('option');
+                option.value = site.site;
+                option.textContent = site.site;
+                siteFilter.appendChild(option);
+            });
+
+            siteFilter.addEventListener('change', filterData);
+            document.getElementById('metricFilter').addEventListener('change', updateKPIs);
+        }
+
+        function filterData() {
+            const selectedSite = document.getElementById('siteFilter').value;
+            filteredData = selectedSite ? sitesData.filter(s => s.site === selectedSite) : [...sitesData];
+            updateTable();
+            updateKPIs();
+        }
+
+        function updateKPIs() {
+            const metric = document.getElementById('metricFilter').value;
+            const kpisContainer = document.getElementById('kpisContainer');
+            kpisContainer.innerHTML = '';
+
+            // KPI 1: Taux de Service Moyen
+            const avgService = filteredData.reduce((sum, s) => sum + s.service_rate, 0) / filteredData.length;
+            const kpiService = document.createElement('div');
+            kpiService.className = 'kpi-card';
+            kpiService.innerHTML = `
+                <h3>Taux de Service Moyen</h3>
+                <div class="kpi-value ${getServiceStatusClass(avgService)}">${formatPercent(avgService)}</div>
+                <div class="kpi-subtitle">Performance de livraison</div>
+            `;
+            kpisContainer.appendChild(kpiService);
+
+            // KPI 2: Total Lignes Commandées
+            const totalLines = filteredData.reduce((sum, s) => sum + s.lines_ordered, 0);
+            const kpiLines = document.createElement('div');
+            kpiLines.className = 'kpi-card';
+            kpiLines.innerHTML = `
+                <h3>Total Lignes</h3>
+                <div class="kpi-value" style="color: #764ba2;">${formatNumber(totalLines)}</div>
+                <div class="kpi-subtitle">Commandées</div>
+            `;
+            kpisContainer.appendChild(kpiLines);
+
+            // KPI 3: Taux d'Incidents
+            const totalIncidents = filteredData.reduce((sum, s) => sum + s.lines_with_incidents, 0);
+            const incidentRate = totalIncidents / totalLines;
+            const kpiIncidents = document.createElement('div');
+            kpiIncidents.className = 'kpi-card';
+            kpiIncidents.innerHTML = `
+                <h3>Taux d'Incidents</h3>
+                <div class="kpi-value ${getServiceStatusClass(1 - incidentRate)}" style="color: #e74c3c;">${formatPercent(incidentRate)}</div>
+                <div class="kpi-subtitle">${formatNumber(totalIncidents)} lignes</div>
+            `;
+            kpisContainer.appendChild(kpiIncidents);
+
+            // KPI 4: Total Livraisons
+            const totalDeliveries = filteredData.reduce((sum, s) => sum + s.deliveries, 0);
+            const kpiDeliveries = document.createElement('div');
+            kpiDeliveries.className = 'kpi-card';
+            kpiDeliveries.innerHTML = `
+                <h3>Livraisons/Dépôts</h3>
+                <div class="kpi-value" style="color: #27ae60;">${formatNumber(totalDeliveries)}</div>
+                <div class="kpi-subtitle">Total</div>
+            `;
+            kpisContainer.appendChild(kpiDeliveries);
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('sitesTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach(site => {
+                const row = document.createElement('tr');
+                const incidentRate = site.lines_with_incidents / site.lines_ordered;
+
+                row.innerHTML = `
+                    <td class="site-name">${site.site}</td>
+                    <td>${formatNumber(site.deliveries)}</td>
+                    <td>${formatNumber(site.lines_ordered)}</td>
+                    <td>${formatNumber(site.lines_with_incidents)}</td>
+                    <td>
+                        <span class="metric-bar ${getBarClass(site.service_rate)}"></span>
+                        <span class="metric-percent ${getServiceStatusClass(site.service_rate)}">${formatPercent(site.service_rate)}</span>
+                    </td>
+                    <td>${formatPercent(site.credit_rate)}</td>
+                    <td>${formatPercent(site.vm_rate)}</td>
+                `;
+
+                row.addEventListener('click', () => showDetails(site, row));
+                tbody.appendChild(row);
+            });
+        }
+
+        function showDetails(site, rowElement) {
+            // Supprimer la sélection précédente
+            document.querySelectorAll('#sitesTableBody tr').forEach(r => r.classList.remove('selected'));
+            rowElement.classList.add('selected');
+
+            const detailsPanel = document.getElementById('detailsPanel');
+            document.getElementById('selectedSiteName').textContent = `📍 ${site.site}`;
+
+            const incidentRate = site.lines_with_incidents / site.lines_ordered;
+
+            const detailsGrid = document.getElementById('detailsGrid');
+            detailsGrid.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Livraisons/Dépôts</div>
+                    <div class="detail-value">${formatNumber(site.deliveries)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Lignes Commandées</div>
+                    <div class="detail-value">${formatNumber(site.lines_ordered)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Taux de Service</div>
+                    <div class="detail-value ${getServiceStatusClass(site.service_rate)}">${formatPercent(site.service_rate)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Lignes avec Incidents</div>
+                    <div class="detail-value">${formatNumber(site.lines_with_incidents)}</div>
+                    <div class="comparison">
+                        <span class="trend down">Taux: ${formatPercent(incidentRate)}</span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Taux en Avoir</div>
+                    <div class="detail-value">${formatPercent(site.credit_rate)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Taux VM (Mise en Vente)</div>
+                    <div class="detail-value">${formatPercent(site.vm_rate)}</div>
+                </div>
+            `;
+
+            detailsPanel.classList.add('active');
+            detailsPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialiser
+        document.addEventListener('DOMContentLoaded', () => {
+            initFilters();
+            updateTable();
+            updateKPIs();
+        });
+    </script>
+</body>
+</html>

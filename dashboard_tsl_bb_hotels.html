@@ -42,19 +42,22 @@
         }
 
         .logo-box {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #003580, #FFB81C);
+            width: 120px;
+            height: 80px;
+            background: white;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            text-align: center;
+            border: 2px solid #FFB81C;
+            box-shadow: 0 5px 15px rgba(0, 53, 128, 0.2);
             padding: 10px;
-            box-shadow: 0 5px 15px rgba(0, 53, 128, 0.3);
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         header h1 { 
@@ -380,10 +383,11 @@
         <header>
             <div class="header-logo">
                 <div class="logo-box">
-                    🏨<br>B&B<br>HOTELS
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logotype_bb_hotels.svg/200px-Logotype_bb_hotels.svg.png" alt="B&B Hotels" onerror="this.style.display='none'">
+                    <span style="color: #003580; font-weight: bold; font-size: 12px;" id="bbLogoFallback">B&B HOTELS</span>
                 </div>
-                <div class="logo-box" style="background: linear-gradient(135deg, #FFB81C, #FFA500);">
-                    🍽️<br>TRANS<br>GOURMET
+                <div class="logo-box">
+                    <span style="color: #003580; font-weight: bold; font-size: 12px; text-align: center;">🍽️<br>TRANSGOURMET</span>
                 </div>
             </div>
             <div class="header-content">
@@ -914,7 +918,18 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', refreshDisplay);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Masquer fallback si logo chargé
+            const img = document.querySelector('.logo-box img');
+            if (img && img.complete && img.naturalHeight !== 0) {
+                document.getElementById('bbLogoFallback').style.display = 'none';
+            }
+            img?.addEventListener('load', () => {
+                document.getElementById('bbLogoFallback').style.display = 'none';
+            });
+            
+            refreshDisplay();
+        });
     </script>
 </body>
 </html>

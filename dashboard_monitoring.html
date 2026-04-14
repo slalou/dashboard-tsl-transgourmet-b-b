@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Monitoring TSL - Sensibilité</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Alert Cards */
+        .alert-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid;
+        }
+
+        .alert-critical {
+            border-left-color: #e74c3c;
+            background: #fef5f5;
+        }
+
+        .alert-warning {
+            border-left-color: #f39c12;
+            background: #fffbf0;
+        }
+
+        .alert-info {
+            border-left-color: #3498db;
+            background: #f0f7ff;
+        }
+
+        .alert-success {
+            border-left-color: #27ae60;
+            background: #f0fdf4;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-critical .alert-title { color: #c0392b; }
+        .alert-warning .alert-title { color: #d68910; }
+        .alert-info .alert-title { color: #2980b9; }
+        .alert-success .alert-title { color: #27ae60; }
+
+        .alert-content {
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        /* Risk Meter */
+        .risk-meter {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .risk-bar {
+            flex: 1;
+            height: 24px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #27ae60 0%, #f39c12 50%, #e74c3c 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-indicator {
+            position: absolute;
+            width: 3px;
+            height: 100%;
+            background: #333;
+            top: 0;
+        }
+
+        .risk-value {
+            font-weight: bold;
+            min-width: 60px;
+            text-align: right;
+            font-size: 1.1em;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .risk-high {
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+
+        .risk-medium {
+            background: #fff4e5;
+            color: #d68910;
+        }
+
+        .risk-low {
+            background: #e5f7ff;
+            color: #2980b9;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 3px solid #667eea;
+        }
+
+        .kpi-label {
+            color: #999;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .kpi-subtitle {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .chart-box h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .chart-inner {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-group input {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            color: #999;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex: 1 1 calc(50% - 5px);
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚨 Dashboard Monitoring TSL - Sensibilité</h1>
+            <p>Suivi des Fournisseurs, Produits, Sites et Clients à Risque | Mars 2026</p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'alertes')">🚨 Alertes Critiques</button>
+            <button class="tab-btn" onclick="switchTab(event, 'suppliers')">📦 Fournisseurs</button>
+            <button class="tab-btn" onclick="switchTab(event, 'products')">🛍️ Produits</button>
+            <button class="tab-btn" onclick="switchTab(event, 'sites')">📍 Plateformes</button>
+            <button class="tab-btn" onclick="switchTab(event, 'clients')">👥 Clients</button>
+        </div>
+
+        <!-- TAB 1: ALERTES CRITIQUES -->
+        <div id="alertes" class="tab-content active">
+            <div class="kpi-grid" id="alertKpis"></div>
+            
+            <h2 style="margin: 30px 0 20px; color: #333;">🔴 Alertes Critiques (Risk > 80)</h2>
+            <div id="criticalAlerts"></div>
+
+            <h2 style="margin: 30px 0 20px; color: #333;">🟠 Avertissements (Risk 50-80)</h2>
+            <div id="warningAlerts"></div>
+
+            <div class="charts-grid">
+                <div class="chart-box">
+                    <h3>📊 Distribution du Risque (Fournisseurs)</h3>
+                    <div class="chart-inner">
+                        <canvas id="riskDistributionChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3>📊 Top Risques par Catégorie</h3>
+                    <div class="chart-inner">
+                        <canvas id="topRisksChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: FOURNISSEURS -->
+        <div id="suppliers" class="tab-content">
+            <div class="stats-grid" id="supplierStats"></div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Risque minimum:</label>
+                    <input type="range" id="supplierRiskFilter" min="0" max="100" value="0" onchange="filterSuppliers()">
+                    <span id="supplierRiskValue">0</span>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fournisseur</th>
+                            <th>Taux Service</th>
+                            <th>Score Risque</th>
+                            <th>Incidents</th>
+                            <th>Produits</th>
+                            <th>Sites</th>
+                            <th>Principal Motif</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suppliersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: PRODUITS -->
+        <div id="products" class="tab-content">
+            <div class="stats-grid" id="productStats"></div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Risque minimum:</label>
+                    <input type="range" id="productRiskFilter" min="0" max="100" value="0" onchange="filterProducts()">
+                    <span id="productRiskValue">0</span>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code Produit</th>
+                            <th>Taux Service</th>
+                            <th>Score Risque</th>
+                            <th>Incidents</th>
+                            <th>Fournisseurs</th>
+                            <th>Sites</th>
+                            <th>Principal Motif</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: SITES/PLATEFORMES -->
+        <div id="sites" class="tab-content">
+            <div class="stats-grid" id="siteStats"></div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Site/Plateforme</th>
+                            <th>Taux Service</th>
+                            <th>Score Risque</th>
+                            <th>Incidents</th>
+                            <th>Produits Gérés</th>
+                            <th>Fournisseurs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sitesTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 5: CLIENTS -->
+        <div id="clients" class="tab-content">
+            <div class="stats-grid" id="clientStats"></div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Rechercher:</label>
+                    <input type="text" id="clientSearch" placeholder="Nom client..." onkeyup="filterClients()">
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client/Hôtel</th>
+                            <th>Site</th>
+                            <th>Taux Service</th>
+                            <th>Score Risque</th>
+                            <th>Incidents</th>
+                            <th>Commandes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>Extraction: 07/04/26 | Période: 01/03/26 - 31/03/26 | Dashboard Monitoring v1.0</p>
+        </footer>
+    </div>
+
+    <script>
+        // Données des alertes - À charger depuis historique/tsl_2026_03.json
+        const alertData = {
+            suppliers: [
+                {name: "LAITA", service_rate: 0, incidents: 2, orders: 2, risk_score: 100, products: 1, sites: 1, top_motif: "Fournisseur"},
+                {name: "OVOTEAM", service_rate: 0, incidents: 1, orders: 1, risk_score: 100, products: 1, sites: 1, top_motif: "Commerce EDI"},
+                {name: "ESTYRIA NATURPRODUKTE", service_rate: 0, incidents: 2, orders: 2, risk_score: 100, products: 1, sites: 2, top_motif: "Appro."},
+                {name: "LUCIEN GEORGELIN", service_rate: 0, incidents: 1, orders: 1, risk_score: 100, products: 1, sites: 1, top_motif: "ERREUR PREP ROLL"},
+                {name: "BERNARD RHF", service_rate: 0, incidents: 1, orders: 1, risk_score: 100, products: 1, sites: 1, top_motif: "ERREUR PREP ROLL"},
+                {name: "ENTREMONT", service_rate: 75, incidents: 2, orders: 8, risk_score: 25, products: 2, sites: 2, top_motif: "ERREUR PREP ROLL"},
+                {name: "COUNTRY FARM FACTORY", service_rate: 75, incidents: 1, orders: 4, risk_score: 25, products: 2, sites: 1, top_motif: "Fournisseur"},
+                {name: "LAITERIE DE SAINT MALO", service_rate: 0, incidents: 1, orders: 1, risk_score: 100, products: 1, sites: 1, top_motif: "ERREUR PREP ROLL"},
+            ],
+            products: [
+                {code: 403033, service_rate: 0, incidents: 2, orders: 2, risk_score: 100, suppliers_count: 1, sites_count: 1, top_motif: "Fournisseur"},
+                {code: 432241, service_rate: 0, incidents: 1, orders: 1, risk_score: 100, suppliers_count: 1, sites_count: 1, top_motif: "Commerce EDI"},
+                {code: 302616, service_rate: 0, incidents: 2, orders: 2, risk_score: 100, suppliers_count: 1, sites_count: 2, top_motif: "Appro."},
+                {code: 222949, service_rate: 0, incidents: 1, orders: 1, risk_score: 100, suppliers_count: 1, sites_count: 1, top_motif: "ERREUR PREP ROLL"},
+                {code: 232456, service_rate: 0, incidents: 1, orders: 1, risk_score: 100, suppliers_count: 1, sites_count: 1, top_motif: "ERREUR PREP ROLL"},
+            ],
+            sites: [
+                {name: "TGO Rhône", service_rate: 97.2, incidents: 18, orders: 609, risk_score: 2.8, products: 45, suppliers: 28},
+                {name: "TGT", service_rate: 98.3, incidents: 14, orders: 476, risk_score: 1.7, products: 38, suppliers: 22},
+            ],
+            clients: [
+                {name: "HOTEL BB GAP", site: "TGO Rhône Gap", service_rate: 95.7, incidents: 2, orders: 47, risk_score: 4.3},
+                {name: "HOTEL B&B TASSIN LA DEMI LUNE", site: "TGO Rhône", service_rate: 97.5, incidents: 3, orders: 119, risk_score: 2.5},
+            ]
+        };
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'alertes') initAlerts();
+            else if (tabName === 'suppliers') initSuppliers();
+            else if (tabName === 'products') initProducts();
+            else if (tabName === 'sites') initSites();
+            else if (tabName === 'clients') initClients();
+        }
+
+        function getRiskLevel(score) {
+            if (score >= 80) return {label: 'Critique', color: '#e74c3c', class: 'alert-critical'};
+            if (score >= 50) return {label: 'Avertissement', color: '#f39c12', class: 'alert-warning'};
+            if (score >= 20) return {label: 'Attention', color: '#3498db', class: 'alert-info'};
+            return {label: 'Bon', color: '#27ae60', class: 'alert-success'};
+        }
+
+        function initAlerts() {
+            const criticalAlerts = document.getElementById('criticalAlerts');
+            const warningAlerts = document.getElementById('warningAlerts');
+            
+            criticalAlerts.innerHTML = '';
+            warningAlerts.innerHTML = '';
+
+            // Alertes fournisseurs
+            alertData.suppliers.forEach(sup => {
+                if (sup.risk_score >= 80) {
+                    const html = `
+                        <div class="alert-box alert-critical">
+                            <div class="alert-title">🔴 ${sup.name}</div>
+                            <div class="alert-content">
+                                <strong>Taux Service:</strong> ${sup.service_rate}% | 
+                                <strong>Incidents:</strong> ${sup.incidents}/${sup.orders} |
+                                <strong>Motif Principal:</strong> ${sup.top_motif}
+                                <div class="risk-meter">
+                                    <div class="risk-bar">
+                                        <div class="risk-indicator" style="left: ${sup.risk_score}%"></div>
+                                    </div>
+                                    <div class="risk-value">${sup.risk_score}/100</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    criticalAlerts.innerHTML += html;
+                } else if (sup.risk_score >= 50) {
+                    const html = `
+                        <div class="alert-box alert-warning">
+                            <div class="alert-title">🟠 ${sup.name}</div>
+                            <div class="alert-content">
+                                <strong>Taux Service:</strong> ${sup.service_rate}% | 
+                                <strong>Incidents:</strong> ${sup.incidents}/${sup.orders}
+                                <div class="risk-meter">
+                                    <div class="risk-bar">
+                                        <div class="risk-indicator" style="left: ${sup.risk_score}%"></div>
+                                    </div>
+                                    <div class="risk-value">${sup.risk_score}/100</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    warningAlerts.innerHTML += html;
+                }
+            });
+
+            // Stats
+            const kpis = document.getElementById('alertKpis');
+            const critical = alertData.suppliers.filter(s => s.risk_score >= 80).length;
+            const warning = alertData.suppliers.filter(s => s.risk_score >= 50 && s.risk_score < 80).length;
+            const avgRisk = (alertData.suppliers.reduce((sum, s) => sum + s.risk_score, 0) / alertData.suppliers.length).toFixed(1);
+
+            kpis.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-label">🔴 Critiques</div>
+                    <div class="kpi-value">${critical}</div>
+                    <div class="kpi-subtitle">Fournisseurs</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">🟠 Avertissements</div>
+                    <div class="kpi-value">${warning}</div>
+                    <div class="kpi-subtitle">Fournisseurs</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">📊 Risque Moyen</div>
+                    <div class="kpi-value">${avgRisk}</div>
+                    <div class="kpi-subtitle">/100</div>
+                </div>
+            `;
+        }
+
+        function initSuppliers() {
+            const tbody = document.getElementById('suppliersTable');
+            tbody.innerHTML = '';
+
+            alertData.suppliers.forEach(sup => {
+                const riskLevel = getRiskLevel(sup.risk_score);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${sup.name}</td>
+                    <td>${sup.service_rate}%</td>
+                    <td><span class="risk-badge ${sup.risk_score >= 80 ? 'risk-high' : sup.risk_score >= 50 ? 'risk-medium' : 'risk-low'}">${sup.risk_score}/100</span></td>
+                    <td>${sup.incidents}</td>
+                    <td>${sup.products}</td>
+                    <td>${sup.sites}</td>
+                    <td>${sup.top_motif}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Stats
+            const stats = document.getElementById('supplierStats');
+            stats.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.suppliers.length}</div>
+                    <div class="stat-label">Fournisseurs</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.suppliers.filter(s => s.risk_score >= 80).length}</div>
+                    <div class="stat-label">Critiques</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.suppliers.filter(s => s.service_rate === 0).length}</div>
+                    <div class="stat-label">Service 0%</div>
+                </div>
+            `;
+        }
+
+        function filterSuppliers() {
+            const minRisk = parseInt(document.getElementById('supplierRiskFilter').value);
+            document.getElementById('supplierRiskValue').textContent = minRisk;
+            
+            const tbody = document.getElementById('suppliersTable');
+            tbody.innerHTML = '';
+
+            alertData.suppliers.filter(s => s.risk_score >= minRisk).forEach(sup => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${sup.name}</td>
+                    <td>${sup.service_rate}%</td>
+                    <td><span class="risk-badge ${sup.risk_score >= 80 ? 'risk-high' : sup.risk_score >= 50 ? 'risk-medium' : 'risk-low'}">${sup.risk_score}/100</span></td>
+                    <td>${sup.incidents}</td>
+                    <td>${sup.products}</td>
+                    <td>${sup.sites}</td>
+                    <td>${sup.top_motif}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function initProducts() {
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = '';
+
+            alertData.products.forEach(prod => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">Code ${prod.code}</td>
+                    <td>${prod.service_rate}%</td>
+                    <td><span class="risk-badge ${prod.risk_score >= 80 ? 'risk-high' : prod.risk_score >= 50 ? 'risk-medium' : 'risk-low'}">${prod.risk_score}/100</span></td>
+                    <td>${prod.incidents}</td>
+                    <td>${prod.suppliers_count}</td>
+                    <td>${prod.sites_count}</td>
+                    <td>${prod.top_motif}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const stats = document.getElementById('productStats');
+            stats.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.products.length}</div>
+                    <div class="stat-label">Produits Analysés</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.products.filter(p => p.risk_score >= 80).length}</div>
+                    <div class="stat-label">Critiques</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.products.filter(p => p.service_rate === 0).length}</div>
+                    <div class="stat-label">Service 0%</div>
+                </div>
+            `;
+        }
+
+        function filterProducts() {
+            const minRisk = parseInt(document.getElementById('productRiskFilter').value);
+            document.getElementById('productRiskValue').textContent = minRisk;
+            
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = '';
+
+            alertData.products.filter(p => p.risk_score >= minRisk).forEach(prod => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">Code ${prod.code}</td>
+                    <td>${prod.service_rate}%</td>
+                    <td><span class="risk-badge ${prod.risk_score >= 80 ? 'risk-high' : prod.risk_score >= 50 ? 'risk-medium' : 'risk-low'}">${prod.risk_score}/100</span></td>
+                    <td>${prod.incidents}</td>
+                    <td>${prod.suppliers_count}</td>
+                    <td>${prod.sites_count}</td>
+                    <td>${prod.top_motif}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function initSites() {
+            const tbody = document.getElementById('sitesTable');
+            tbody.innerHTML = '';
+
+            alertData.sites.forEach(site => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${site.name}</td>
+                    <td>${site.service_rate.toFixed(1)}%</td>
+                    <td><span class="risk-badge risk-low">${site.risk_score.toFixed(1)}/100</span></td>
+                    <td>${site.incidents}</td>
+                    <td>${site.products}</td>
+                    <td>${site.suppliers}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const stats = document.getElementById('siteStats');
+            stats.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.sites.length}</div>
+                    <div class="stat-label">Sites</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${(alertData.sites.reduce((sum, s) => sum + s.service_rate, 0) / alertData.sites.length).toFixed(1)}%</div>
+                    <div class="stat-label">Service Moyen</div>
+                </div>
+            `;
+        }
+
+        function initClients() {
+            const tbody = document.getElementById('clientsTable');
+            tbody.innerHTML = '';
+
+            alertData.clients.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${client.name}</td>
+                    <td>${client.site}</td>
+                    <td>${client.service_rate.toFixed(1)}%</td>
+                    <td><span class="risk-badge risk-low">${client.risk_score.toFixed(1)}/100</span></td>
+                    <td>${client.incidents}</td>
+                    <td>${client.orders}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const stats = document.getElementById('clientStats');
+            stats.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-number">${alertData.clients.length}</div>
+                    <div class="stat-label">Clients Analysés</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${(alertData.clients.reduce((sum, c) => sum + c.service_rate, 0) / alertData.clients.length).toFixed(1)}%</div>
+                    <div class="stat-label">Service Moyen</div>
+                </div>
+            `;
+        }
+
+        function filterClients() {
+            const search = document.getElementById('clientSearch').value.toLowerCase();
+            const tbody = document.getElementById('clientsTable');
+            tbody.innerHTML = '';
+
+            alertData.clients.filter(c => c.name.toLowerCase().includes(search)).forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${client.name}</td>
+                    <td>${client.site}</td>
+                    <td>${client.service_rate.toFixed(1)}%</td>
+                    <td><span class="risk-badge risk-low">${client.risk_score.toFixed(1)}/100</span></td>
+                    <td>${client.incidents}</td>
+                    <td>${client.orders}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', initAlerts);
+    </script>
+</body>
+</html>

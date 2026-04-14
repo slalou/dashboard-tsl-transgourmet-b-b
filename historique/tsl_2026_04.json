@@ -1,0 +1,1493 @@
+{
+  "month": "2026_04",
+  "sites": [
+    {
+      "site": "Achats",
+      "deliveries": 0,
+      "lines_ordered": 158,
+      "lines_with_incidents": 12,
+      "service_rate": 146.0,
+      "credit_rate": 0.00333263024678338,
+      "vm_rate": 0
+    },
+    {
+      "site": "Appros",
+      "deliveries": 0,
+      "lines_ordered": 132,
+      "lines_with_incidents": 0,
+      "service_rate": 132.0,
+      "credit_rate": 0.00278422273781903,
+      "vm_rate": 0
+    },
+    {
+      "site": "Commerce",
+      "deliveries": 0,
+      "lines_ordered": 278,
+      "lines_with_incidents": 265,
+      "service_rate": 13.0,
+      "credit_rate": 0.00586374182661886,
+      "vm_rate": 0
+    },
+    {
+      "site": "Entrepôt",
+      "deliveries": 0,
+      "lines_ordered": 176,
+      "lines_with_incidents": 120,
+      "service_rate": 56.0,
+      "credit_rate": 0.00372284328200802,
+      "vm_rate": 0
+    },
+    {
+      "site": "Somme :",
+      "deliveries": 0,
+      "lines_ordered": 819,
+      "lines_with_incidents": 472,
+      "service_rate": 347.0,
+      "credit_rate": 0.0172748365323771,
+      "vm_rate": 0
+    },
+    {
+      "site": "TGO Alpes",
+      "deliveries": 82,
+      "lines_ordered": 1359,
+      "lines_with_incidents": 40,
+      "service_rate": 0.970566593083149,
+      "credit_rate": 0.013980868285504,
+      "vm_rate": 0.0154525386313466
+    },
+    {
+      "site": "TGO Alsace",
+      "deliveries": 123,
+      "lines_ordered": 1730,
+      "lines_with_incidents": 32,
+      "service_rate": 0.98150289017341,
+      "credit_rate": 0.0109826589595376,
+      "vm_rate": 0.00751445086705202
+    },
+    {
+      "site": "TGO Aquitaine",
+      "deliveries": 217,
+      "lines_ordered": 3299,
+      "lines_with_incidents": 77,
+      "service_rate": 0.976659593816308,
+      "credit_rate": 0.0118217641709609,
+      "vm_rate": 0.0115186420127311
+    },
+    {
+      "site": "TGO Bourgogne",
+      "deliveries": 88,
+      "lines_ordered": 1360,
+      "lines_with_incidents": 15,
+      "service_rate": 0.988970588235294,
+      "credit_rate": 0.00882352941176471,
+      "vm_rate": 0.00220588235294118
+    },
+    {
+      "site": "TGO Centre Est",
+      "deliveries": 55,
+      "lines_ordered": 898,
+      "lines_with_incidents": 25,
+      "service_rate": 0.972160356347439,
+      "credit_rate": 0.0155902004454343,
+      "vm_rate": 0.0122494432071269
+    },
+    {
+      "site": "TGO Centre Ouest",
+      "deliveries": 206,
+      "lines_ordered": 3132,
+      "lines_with_incidents": 54,
+      "service_rate": 0.982758620689655,
+      "credit_rate": 0.00973818646232439,
+      "vm_rate": 0.00750319284802043
+    },
+    {
+      "site": "TGO IDF Valenton",
+      "deliveries": 564,
+      "lines_ordered": 12057,
+      "lines_with_incidents": 182,
+      "service_rate": 0.984905034419839,
+      "credit_rate": 0.00821099776063698,
+      "vm_rate": 0.00688396781952393
+    },
+    {
+      "site": "TGO Lorraine",
+      "deliveries": 90,
+      "lines_ordered": 1422,
+      "lines_with_incidents": 32,
+      "service_rate": 0.977496483825598,
+      "credit_rate": 0.0154711673699015,
+      "vm_rate": 0.0070323488045007
+    },
+    {
+      "site": "TGO Midi-Pyrénées",
+      "deliveries": 155,
+      "lines_ordered": 2397,
+      "lines_with_incidents": 41,
+      "service_rate": 0.982895285773884,
+      "credit_rate": 0.00876095118898623,
+      "vm_rate": 0.00834376303712975
+    },
+    {
+      "site": "TGO Méditerranée",
+      "deliveries": 346,
+      "lines_ordered": 5075,
+      "lines_with_incidents": 153,
+      "service_rate": 0.969852216748769,
+      "credit_rate": 0.0175369458128079,
+      "vm_rate": 0.0126108374384236
+    },
+    {
+      "site": "TGO Nord",
+      "deliveries": 418,
+      "lines_ordered": 6920,
+      "lines_with_incidents": 52,
+      "service_rate": 0.992485549132948,
+      "credit_rate": 0.0046242774566474,
+      "vm_rate": 0.00289017341040462
+    },
+    {
+      "site": "TGO Ouest",
+      "deliveries": 309,
+      "lines_ordered": 4318,
+      "lines_with_incidents": 80,
+      "service_rate": 0.981472904122279,
+      "credit_rate": 0.0133163501621121,
+      "vm_rate": 0.00521074571560908
+    },
+    {
+      "site": "TGO Rhône",
+      "deliveries": 217,
+      "lines_ordered": 3396,
+      "lines_with_incidents": 34,
+      "service_rate": 0.989988221436985,
+      "credit_rate": 0.00530035335689046,
+      "vm_rate": 0.00471142520612485
+    },
+    {
+      "site": "TGO Rhône Gap",
+      "deliveries": 4,
+      "lines_ordered": 47,
+      "lines_with_incidents": 2,
+      "service_rate": 0.957446808510638,
+      "credit_rate": 0,
+      "vm_rate": 0.0425531914893617
+    },
+    {
+      "site": "TGT",
+      "deliveries": 2874,
+      "lines_ordered": 47410,
+      "lines_with_incidents": 819,
+      "service_rate": 0.982725163467623,
+      "credit_rate": 0.00995570554735288,
+      "vm_rate": 0.00731913098502426
+    },
+    {
+      "site": "Transport",
+      "deliveries": 0,
+      "lines_ordered": 74,
+      "lines_with_incidents": 74,
+      "service_rate": 0,
+      "credit_rate": 0.00157139843914786,
+      "vm_rate": 0
+    }
+  ],
+  "suppliers": [
+    {
+      "name": "LAITA",
+      "service_rate": 0.0,
+      "incidents": 62,
+      "orders": 62,
+      "risk_score": 100.0
+    },
+    {
+      "name": "OVOTEAM",
+      "service_rate": 0.0,
+      "incidents": 24,
+      "orders": 24,
+      "risk_score": 100.0
+    },
+    {
+      "name": "ESTYRIA NATURPRODUKTE",
+      "service_rate": 0.0,
+      "incidents": 10,
+      "orders": 10,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LUCIEN GEORGELIN",
+      "service_rate": 0.0,
+      "incidents": 21,
+      "orders": 21,
+      "risk_score": 100.0
+    },
+    {
+      "name": "BERNARD RHF",
+      "service_rate": 0.0,
+      "incidents": 18,
+      "orders": 18,
+      "risk_score": 100.0
+    },
+    {
+      "name": "ENTREMONT",
+      "service_rate": 0.0,
+      "incidents": 42,
+      "orders": 42,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LAITERIE DE SAINT MALO",
+      "service_rate": 0.0,
+      "incidents": 84,
+      "orders": 84,
+      "risk_score": 100.0
+    },
+    {
+      "name": "COUNTRY FARM FACTORY",
+      "service_rate": 0.0,
+      "incidents": 275,
+      "orders": 275,
+      "risk_score": 100.0
+    },
+    {
+      "name": "BHARLEV INDUSTRIES",
+      "service_rate": 0.0,
+      "incidents": 33,
+      "orders": 33,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LA BOULANGERE & CO",
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "name": "SPEIR FL STOCK ET ALLOTI",
+      "service_rate": 0.0,
+      "incidents": 36,
+      "orders": 36,
+      "risk_score": 100.0
+    },
+    {
+      "name": "MC CORMICK France",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "PREMIUM FOODS SOLUTIONS",
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "name": "BRIOIS",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "FERME DU PRE",
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "name": "UNILEVER FRANCE",
+      "service_rate": 0.0,
+      "incidents": 13,
+      "orders": 13,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LE ROTISSEUR DE GUERLEDAN",
+      "service_rate": 0.0,
+      "incidents": 20,
+      "orders": 20,
+      "risk_score": 100.0
+    },
+    {
+      "name": "EUROPA CUISSON",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "GGF",
+      "service_rate": 0.0,
+      "incidents": 27,
+      "orders": 27,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LIPTON TEAS & INFUSIONS FRANCE",
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LAITERIE ST DENIS DE L'HOTEL",
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "name": "VANDEMOORTELE EUROPE NV SURG",
+      "service_rate": 0.0,
+      "incidents": 16,
+      "orders": 16,
+      "risk_score": 100.0
+    },
+    {
+      "name": "BRIDOR",
+      "service_rate": 0.0,
+      "incidents": 17,
+      "orders": 17,
+      "risk_score": 100.0
+    },
+    {
+      "name": "VOLATYS",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "VESTEY FOODS FRANCE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "AMBROSI France",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "PEP",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "BELL FRANCE",
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "name": "COOP.PRODUCTEURS LEGUMIERS",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "COMPAGNIE FRUITIERE FRANCE",
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "name": "DRAGSBAEK",
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "name": "MC CAIN FOODS EUROPE B.V",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LA COMPAGNIE DES PYRENEES",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "SPEIR PREMIUM STOCK EP-FR",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LA PULPE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "FERRERO FRANCE COMMERCIALE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "MONDELEZ FRANCE",
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "name": "SAGY COMPANY SAS",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "JEAN CARTON",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LOEUF SAS",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "DAURCES DISTRIBUTION",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "CIE MONTAGNE NOIRE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "CHARLES FARAUD",
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "name": "DANONE PRODUITS FRAIS FRANCE",
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "name": "GROUPE LACTALIS FOOD SERVIC.FR",
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "name": "K + S FRANCE",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "SAPAM",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "PASQUIER",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "LES 4 SAISONS",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "RERO",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "TEREOS FRANCE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "FAMILLE MICHAUD APICULTEURS",
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "name": "ASP / FRAIS FACTURATION",
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "name": "FRUTREE S.R.O",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "NOVANDIE",
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "name": "HAPPYVORE NOUVEAUX FERMIERS",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "BROCELIANDE ALH",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "COOPERL ARC ATLANTIQUE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "VIVAFRUTA PRODUCTORES",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "COMPAGNIE MADRANGE",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "FROMAGERIES NORMANDIE ET IDF",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "name": "NESTLE PROFESSIONAL",
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    }
+  ],
+  "products": [
+    {
+      "code": 403033,
+      "service_rate": 0.0,
+      "incidents": 40,
+      "orders": 40,
+      "risk_score": 100.0
+    },
+    {
+      "code": 432241,
+      "service_rate": 0.0,
+      "incidents": 23,
+      "orders": 23,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302616,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 222949,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 232456,
+      "service_rate": 0.0,
+      "incidents": 17,
+      "orders": 17,
+      "risk_score": 100.0
+    },
+    {
+      "code": 241966,
+      "service_rate": 0.0,
+      "incidents": 12,
+      "orders": 12,
+      "risk_score": 100.0
+    },
+    {
+      "code": 209312,
+      "service_rate": 0.0,
+      "incidents": 23,
+      "orders": 23,
+      "risk_score": 100.0
+    },
+    {
+      "code": 311569,
+      "service_rate": 0.0,
+      "incidents": 21,
+      "orders": 21,
+      "risk_score": 100.0
+    },
+    {
+      "code": 317397,
+      "service_rate": 0.0,
+      "incidents": 31,
+      "orders": 31,
+      "risk_score": 100.0
+    },
+    {
+      "code": 257545,
+      "service_rate": 0.0,
+      "incidents": 217,
+      "orders": 217,
+      "risk_score": 100.0
+    },
+    {
+      "code": 301231,
+      "service_rate": 0.0,
+      "incidents": 29,
+      "orders": 29,
+      "risk_score": 100.0
+    },
+    {
+      "code": 252351,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 252941,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302123,
+      "service_rate": 0.0,
+      "incidents": 26,
+      "orders": 26,
+      "risk_score": 100.0
+    },
+    {
+      "code": 494294,
+      "service_rate": 0.0,
+      "incidents": 10,
+      "orders": 10,
+      "risk_score": 100.0
+    },
+    {
+      "code": 237731,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 476044,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 204134,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 494302,
+      "service_rate": 0.0,
+      "incidents": 11,
+      "orders": 11,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302242,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 301714,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 242686,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 429368,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 277504,
+      "service_rate": 0.0,
+      "incidents": 13,
+      "orders": 13,
+      "risk_score": 100.0
+    },
+    {
+      "code": 503019,
+      "service_rate": 0.0,
+      "incidents": 20,
+      "orders": 20,
+      "risk_score": 100.0
+    },
+    {
+      "code": 70075,
+      "service_rate": 0.0,
+      "incidents": 10,
+      "orders": 10,
+      "risk_score": 100.0
+    },
+    {
+      "code": 245099,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 209315,
+      "service_rate": 0.0,
+      "incidents": 23,
+      "orders": 23,
+      "risk_score": 100.0
+    },
+    {
+      "code": 209374,
+      "service_rate": 0.0,
+      "incidents": 25,
+      "orders": 25,
+      "risk_score": 100.0
+    },
+    {
+      "code": 216965,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 507687,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302524,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 404655,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 234616,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 404647,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 404682,
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "code": 200668,
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "code": 245202,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 300744,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 483784,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 101744,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 505064,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 244290,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 868475,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 208328,
+      "service_rate": 0.0,
+      "incidents": 5,
+      "orders": 5,
+      "risk_score": 100.0
+    },
+    {
+      "code": 215501,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 215502,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 204344,
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "code": 310022,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 422740,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302244,
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "code": 447466,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 838956,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 301230,
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "code": 213569,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302146,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 215388,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 205590,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 980987,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 208865,
+      "service_rate": 0.0,
+      "incidents": 5,
+      "orders": 5,
+      "risk_score": 100.0
+    },
+    {
+      "code": 212961,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 971052,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 246113,
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "code": 450635,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 218166,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 249597,
+      "service_rate": 0.0,
+      "incidents": 18,
+      "orders": 18,
+      "risk_score": 100.0
+    },
+    {
+      "code": 301573,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302492,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 245379,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 301398,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 213581,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 252641,
+      "service_rate": 0.0,
+      "incidents": 5,
+      "orders": 5,
+      "risk_score": 100.0
+    },
+    {
+      "code": 241963,
+      "service_rate": 0.0,
+      "incidents": 9,
+      "orders": 9,
+      "risk_score": 100.0
+    },
+    {
+      "code": 485409,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 961566,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 238905,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 524174,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 967385,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 208866,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302558,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 142778,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 300616,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 217425,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 487067,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 217176,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 208879,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 450192,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 243706,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 301491,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302615,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 257752,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 272625,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 317400,
+      "service_rate": 0.0,
+      "incidents": 11,
+      "orders": 11,
+      "risk_score": 100.0
+    },
+    {
+      "code": 217157,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 583568,
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "code": 999078,
+      "service_rate": 0.0,
+      "incidents": 3,
+      "orders": 3,
+      "risk_score": 100.0
+    },
+    {
+      "code": 255588,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302259,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 222457,
+      "service_rate": 0.0,
+      "incidents": 6,
+      "orders": 6,
+      "risk_score": 100.0
+    },
+    {
+      "code": 317402,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 641118,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 244190,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 430311,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 623703,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 966271,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 317398,
+      "service_rate": 0.0,
+      "incidents": 5,
+      "orders": 5,
+      "risk_score": 100.0
+    },
+    {
+      "code": 495176,
+      "service_rate": 0.0,
+      "incidents": 4,
+      "orders": 4,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302495,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 218989,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 317341,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 300093,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 864976,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 215675,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 208709,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 533889,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 252682,
+      "service_rate": 0.0,
+      "incidents": 2,
+      "orders": 2,
+      "risk_score": 100.0
+    },
+    {
+      "code": 900311,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 249811,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 240572,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 302613,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 215768,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 59840,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    },
+    {
+      "code": 394810,
+      "service_rate": 0.0,
+      "incidents": 1,
+      "orders": 1,
+      "risk_score": 100.0
+    }
+  ]
+}

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard TSL - Sélection Période</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1800px; margin: 0 auto; }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 5px; }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label { 
+            font-weight: 600; 
+            color: #333; 
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #ececec;
+        }
+
+        .period-info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .period-info h3 {
+            color: #1976D2;
+            margin-bottom: 8px;
+        }
+
+        .period-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 20px;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab-content.active { display: block; }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        th { padding: 12px 15px; text-align: left; font-weight: 600; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        tbody tr:hover { background: #f9f9f9; }
+
+        .product-name { color: #666; font-size: 0.9em; }
+        .trend-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .trend-up { background: #ffe5e5; color: #c0392b; }
+        .trend-down { background: #e5f7ff; color: #2980b9; }
+        .trend-stable { background: #fff4e5; color: #d68910; }
+
+        .alert-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        footer { text-align: center; color: #999; margin-top: 30px; padding: 20px; }
+
+        @media (max-width: 768px) {
+            .controls { grid-template-columns: 1fr; }
+            .tab-btn { min-width: 120px; padding: 10px 15px; font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard TSL - Sélection Période</h1>
+            <p>Analysez les incidents TSL sur la période de votre choix</p>
+        </header>
+
+        <!-- CONTRÔLES DE PÉRIODE -->
+        <div class="controls">
+            <div class="control-group">
+                <label>📅 Mois de Début</label>
+                <select id="startMonth">
+                    <option value="2026_01">Janvier 2026</option>
+                    <option value="2026_02">Février 2026</option>
+                    <option value="2026_03">Mars 2026</option>
+                    <option value="2026_04">Avril 2026</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>📅 Mois de Fin</label>
+                <select id="endMonth">
+                    <option value="2026_01">Janvier 2026</option>
+                    <option value="2026_02">Février 2026</option>
+                    <option value="2026_03">Mars 2026</option>
+                    <option value="2026_04" selected>Avril 2026</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="updatePeriod()">🔍 Appliquer</button>
+                    <button class="btn btn-secondary" onclick="resetPeriod()">↻ Réinitialiser</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFOS PÉRIODE -->
+        <div class="period-info">
+            <h3 id="periodTitle">Période: Janvier - Avril 2026 (4 mois)</h3>
+            <div class="period-stats" id="periodStats"></div>
+        </div>
+
+        <!-- RACCOURCIS PÉRIODE -->
+        <div class="controls" style="margin-bottom: 20px;">
+            <div style="grid-column: 1/-1; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="setPeriod('2026_01', '2026_01')">📌 Janvier Only</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_02', '2026_02')">📌 Février Only</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_03', '2026_03')">📌 Mars Only</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_04', '2026_04')">📌 Avril Only</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_01', '2026_02')">📌 Jan-Fév</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_02', '2026_03')">📌 Fév-Mar</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_03', '2026_04')">📌 Mar-Avr</button>
+                <button class="btn btn-secondary" onclick="setPeriod('2026_01', '2026_04')">📌 4 Mois (All)</button>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'suppliers')">📦 Fournisseurs</button>
+            <button class="tab-btn" onclick="switchTab(event, 'products')">🛍️ Produits</button>
+            <button class="tab-btn" onclick="switchTab(event, 'sites')">📍 Sites</button>
+            <button class="tab-btn" onclick="switchTab(event, 'analysis')">📊 Analyse</button>
+        </div>
+
+        <!-- TAB 1: FOURNISSEURS -->
+        <div id="suppliers" class="tab-content active">
+            <h2>📦 Fournisseurs - Évolution sur la Période</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fournisseur</th>
+                            <th colspan="4" style="text-align: center;">Incidents par Mois</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                        <tr id="monthHeaders"></tr>
+                    </thead>
+                    <tbody id="suppliersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: PRODUITS -->
+        <div id="products" class="tab-content">
+            <h2>🛍️ Produits Persistants - Évolution sur la Période</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Nom du Produit</th>
+                            <th colspan="4" style="text-align: center;">Incidents par Mois</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                        <tr id="productMonthHeaders"></tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: SITES -->
+        <div id="sites" class="tab-content">
+            <h2>📍 Sites/Plateformes - Évolution sur la Période</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Site</th>
+                            <th colspan="4" style="text-align: center;">Incidents par Mois</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                        <tr id="siteMonthHeaders"></tr>
+                    </thead>
+                    <tbody id="sitesTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 4: ANALYSE -->
+        <div id="analysis" class="tab-content">
+            <h2>📊 Analyse Comparative</h2>
+            <div id="analysisContent"></div>
+        </div>
+
+        <footer>
+            <p>Dashboard TSL v3.0 | Sélecteur Période | Focus: Évolution incidents</p>
+        </footer>
+    </div>
+
+    <script>
+        const monthLabels = {
+            '2026_01': 'Janvier',
+            '2026_02': 'Février',
+            '2026_03': 'Mars',
+            '2026_04': 'Avril'
+        };
+
+        const monthOrder = ['2026_01', '2026_02', '2026_03', '2026_04'];
+
+        const supplierData = {
+            'COUNTRY FARM FACTORY': { '2026_01': 222, '2026_02': 200, '2026_03': 320, '2026_04': 275 },
+            'LAITERIE DE SAINT MALO': { '2026_01': 215, '2026_02': 215, '2026_03': 180, '2026_04': 160 },
+            'LUCIEN GEORGELIN': { '2026_01': 70, '2026_02': 7, '2026_03': 14, '2026_04': 21 },
+            'SPEIR FL STOCK ET ALLOTI': { '2026_01': 38, '2026_02': 48, '2026_03': 47, '2026_04': 36 },
+            'FAMILLE MICHAUD APICULTEURS': { '2026_01': 5, '2026_02': 1, '2026_03': 2, '2026_04': 6 }
+        };
+
+        const productData = {
+            317400: { name: "THE NOIR CEYLAN X25 *BIO", '2026_01': 10, '2026_02': 96, '2026_03': 159, '2026_04': 11 },
+            252682: { name: "THE EARL GREY EXCELLEN.X25*BIO", '2026_01': 57, '2026_02': 0, '2026_03': 121, '2026_04': 2 },
+            432241: { name: "OEUF BROUILLE NAT P. AIR 500 G", '2026_01': 24, '2026_02': 69, '2026_03': 28, '2026_04': 23 },
+            317398: { name: "INFUSION VERVEINE X25 *BIO", '2026_01': 63, '2026_02': 55, '2026_03': 17, '2026_04': 5 },
+            403033: { name: "FROM.FRAIS 1/2 SEL 25 G X24", '2026_01': 35, '2026_02': 18, '2026_03': 35, '2026_04': 40 }
+        };
+
+        const siteData = {
+            'TGT': { '2026_01': 785, '2026_02': 1161, '2026_03': 792, '2026_04': 819 },
+            'TGO IDF Valenton': { '2026_01': 113, '2026_02': 433, '2026_03': 212, '2026_04': 182 },
+            'TGO Méditerranée': { '2026_01': 101, '2026_02': 154, '2026_03': 121, '2026_04': 153 },
+            'TGO Ouest': { '2026_01': 69, '2026_02': 150, '2026_03': 78, '2026_04': 80 },
+            'TGO Nord': { '2026_01': 73, '2026_02': 95, '2026_03': 62, '2026_04': 52 }
+        };
+
+        let currentStart = '2026_01';
+        let currentEnd = '2026_04';
+
+        function getMonthsInRange(start, end) {
+            const startIdx = monthOrder.indexOf(start);
+            const endIdx = monthOrder.indexOf(end);
+            if (startIdx > endIdx) return [];
+            return monthOrder.slice(startIdx, endIdx + 1);
+        }
+
+        function updatePeriod() {
+            currentStart = document.getElementById('startMonth').value;
+            currentEnd = document.getElementById('endMonth').value;
+            
+            if (monthOrder.indexOf(currentStart) > monthOrder.indexOf(currentEnd)) {
+                alert('La date de fin doit être après la date de début!');
+                return;
+            }
+            
+            refreshDisplay();
+        }
+
+        function resetPeriod() {
+            document.getElementById('startMonth').value = '2026_01';
+            document.getElementById('endMonth').value = '2026_04';
+            currentStart = '2026_01';
+            currentEnd = '2026_04';
+            refreshDisplay();
+        }
+
+        function setPeriod(start, end) {
+            document.getElementById('startMonth').value = start;
+            document.getElementById('endMonth').value = end;
+            currentStart = start;
+            currentEnd = end;
+            refreshDisplay();
+        }
+
+        function refreshDisplay() {
+            const months = getMonthsInRange(currentStart, currentEnd);
+            const monthNames = months.map(m => monthLabels[m]).join(' → ');
+            const monthCount = months.length;
+            
+            document.getElementById('periodTitle').textContent = 
+                `Période: ${monthNames} (${monthCount} mois)`;
+
+            updatePeriodStats(months);
+            updateMonthHeaders(months);
+            initSuppliers(months);
+        }
+
+        function updatePeriodStats(months) {
+            const stats = document.getElementById('periodStats');
+            let totalIncidents = 0;
+            
+            for (const supplier of Object.values(supplierData)) {
+                for (const month of months) {
+                    totalIncidents += supplier[month] || 0;
+                }
+            }
+
+            stats.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-label">Période</div>
+                    <div class="stat-value">${months.map(m => monthLabels[m].substring(0, 3)).join('-')}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Incidents</div>
+                    <div class="stat-value">${totalIncidents}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Mois Inclus</div>
+                    <div class="stat-value">${months.length}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Moyenne/Mois</div>
+                    <div class="stat-value">${Math.round(totalIncidents / months.length)}</div>
+                </div>
+            `;
+        }
+
+        function updateMonthHeaders(months) {
+            const headers = months.map(m => `<th>${monthLabels[m].substring(0, 3)}</th>`).join('');
+            document.getElementById('monthHeaders').innerHTML = headers;
+            document.getElementById('productMonthHeaders').innerHTML = headers;
+            document.getElementById('siteMonthHeaders').innerHTML = headers;
+        }
+
+        function getTrend(values) {
+            if (values.length < 2) return { text: '➡️ N/A', class: 'trend-stable' };
+            if (values[values.length-1] > values[0]) return { text: '↗️ HAUSSE', class: 'trend-up' };
+            if (values[values.length-1] < values[0]) return { text: '↘️ BAISSE', class: 'trend-down' };
+            return { text: '➡️ STABLE', class: 'trend-stable' };
+        }
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function initSuppliers(months) {
+            const tbody = document.getElementById('suppliersTable');
+            tbody.innerHTML = '';
+            
+            for (const [name, monthData] of Object.entries(supplierData)) {
+                const values = months.map(m => monthData[m] || 0);
+                const total = values.reduce((a, b) => a + b, 0);
+                const trend = getTrend(values);
+                
+                const cells = values.map(v => `<td>${v}</td>`).join('');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${name}</strong></td>
+                        ${cells}
+                        <td><strong>${total}</strong></td>
+                        <td><span class="trend-badge ${trend.class}">${trend.text}</span></td>
+                    </tr>
+                `;
+            }
+        }
+
+        function initProducts(months) {
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = '';
+            
+            for (const [code, data] of Object.entries(productData)) {
+                const values = months.map(m => data[m] || 0);
+                const total = values.reduce((a, b) => a + b, 0);
+                const trend = getTrend(values);
+                
+                const cells = values.map(v => `<td>${v}</td>`).join('');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${code}</strong></td>
+                        <td><span class="product-name">${data.name}</span></td>
+                        ${cells}
+                        <td><strong>${total}</strong></td>
+                        <td><span class="trend-badge ${trend.class}">${trend.text}</span></td>
+                    </tr>
+                `;
+            }
+        }
+
+        function initSites(months) {
+            const tbody = document.getElementById('sitesTable');
+            tbody.innerHTML = '';
+            
+            for (const [site, monthData] of Object.entries(siteData)) {
+                const values = months.map(m => monthData[m] || 0);
+                const total = values.reduce((a, b) => a + b, 0);
+                const trend = getTrend(values);
+                
+                const cells = values.map(v => `<td>${v}</td>`).join('');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${site}</strong></td>
+                        ${cells}
+                        <td><strong>${total}</strong></td>
+                        <td><span class="trend-badge ${trend.class}">${trend.text}</span></td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Initialiser au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshDisplay();
+        });
+
+        // Onglet analysis cliqué
+        const origSwitchTab = switchTab;
+        switchTab = function(event, tabName) {
+            origSwitchTab(event, tabName);
+            if (tabName === 'suppliers') initSuppliers(getMonthsInRange(currentStart, currentEnd));
+            else if (tabName === 'products') initProducts(getMonthsInRange(currentStart, currentEnd));
+            else if (tabName === 'sites') initSites(getMonthsInRange(currentStart, currentEnd));
+        };
+    </script>
+</body>
+</html>

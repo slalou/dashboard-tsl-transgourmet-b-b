@@ -2,65 +2,11 @@
   "month": "2026_01",
   "sites": [
     {
-      "site": "Achats",
-      "deliveries": 0,
-      "lines_ordered": 175,
-      "lines_with_incidents": 6,
-      "service_rate": 169.0,
-      "credit_rate": 0.00387588314766007,
-      "vm_rate": 0
-    },
-    {
-      "site": "Appros",
-      "deliveries": 0,
-      "lines_ordered": 269,
-      "lines_with_incidents": 0,
-      "service_rate": 269.0,
-      "credit_rate": 0.00595778609554606,
-      "vm_rate": 0
-    },
-    {
-      "site": "Commerce",
-      "deliveries": 0,
-      "lines_ordered": 65,
-      "lines_with_incidents": 58,
-      "service_rate": 7.0,
-      "credit_rate": 0.00143961374055946,
-      "vm_rate": 0
-    },
-    {
-      "site": "Entrepôt",
-      "deliveries": 0,
-      "lines_ordered": 152,
-      "lines_with_incidents": 91,
-      "service_rate": 61.5,
-      "credit_rate": 0.00337755531438949,
-      "vm_rate": 0
-    },
-    {
-      "site": "Responsabilité non identifiée",
-      "deliveries": 0,
-      "lines_ordered": 53,
-      "lines_with_incidents": 53,
-      "service_rate": 0,
-      "credit_rate": 0.00118491284799894,
-      "vm_rate": 0
-    },
-    {
-      "site": "Somme :",
-      "deliveries": 0,
-      "lines_ordered": 785,
-      "lines_with_incidents": 278,
-      "service_rate": 506.5,
-      "credit_rate": 0.017386104405218,
-      "vm_rate": 0
-    },
-    {
       "site": "TGO Alpes",
       "deliveries": 96,
       "lines_ordered": 1744,
       "lines_with_incidents": 78,
-      "service_rate": 0.955275229357798,
+      "service_rate": 95.53,
       "credit_rate": 0.0275229357798165,
       "vm_rate": 0.0172018348623853
     },
@@ -69,7 +15,7 @@
       "deliveries": 176,
       "lines_ordered": 3037,
       "lines_with_incidents": 130,
-      "service_rate": 0.957194599934146,
+      "service_rate": 95.72,
       "credit_rate": 0.0176160684886401,
       "vm_rate": 0.0251893315772144
     },
@@ -78,7 +24,7 @@
       "deliveries": 205,
       "lines_ordered": 3062,
       "lines_with_incidents": 50,
-      "service_rate": 0.983670803396473,
+      "service_rate": 98.37,
       "credit_rate": 0.00375571521881123,
       "vm_rate": 0.0125734813847159
     },
@@ -87,7 +33,7 @@
       "deliveries": 102,
       "lines_ordered": 1321,
       "lines_with_incidents": 17,
-      "service_rate": 0.987130961392884,
+      "service_rate": 98.71,
       "credit_rate": 0.00151400454201363,
       "vm_rate": 0.0113550340651022
     },
@@ -96,7 +42,7 @@
       "deliveries": 55,
       "lines_ordered": 753,
       "lines_with_incidents": 16,
-      "service_rate": 0.978751660026561,
+      "service_rate": 97.88,
       "credit_rate": 0.0119521912350598,
       "vm_rate": 0.00929614873837981
     },
@@ -105,7 +51,7 @@
       "deliveries": 200,
       "lines_ordered": 2862,
       "lines_with_incidents": 24,
-      "service_rate": 0.991614255765199,
+      "service_rate": 99.16,
       "credit_rate": 0.00419287211740042,
       "vm_rate": 0.00419287211740042
     },
@@ -114,7 +60,7 @@
       "deliveries": 536,
       "lines_ordered": 11181,
       "lines_with_incidents": 113,
-      "service_rate": 0.989893569448171,
+      "service_rate": 98.99,
       "credit_rate": 0.00268312315535283,
       "vm_rate": 0.00742330739647617
     },
@@ -123,7 +69,7 @@
       "deliveries": 95,
       "lines_ordered": 1560,
       "lines_with_incidents": 20,
-      "service_rate": 0.987179487179487,
+      "service_rate": 98.72,
       "credit_rate": 0.00128205128205128,
       "vm_rate": 0.0115384615384615
     },
@@ -132,7 +78,7 @@
       "deliveries": 148,
       "lines_ordered": 2321,
       "lines_with_incidents": 66,
-      "service_rate": 0.971563981042654,
+      "service_rate": 97.16,
       "credit_rate": 0.00560103403705299,
       "vm_rate": 0.022834984920293
     },
@@ -141,7 +87,7 @@
       "deliveries": 297,
       "lines_ordered": 4200,
       "lines_with_incidents": 101,
-      "service_rate": 0.975952380952381,
+      "service_rate": 97.6,
       "credit_rate": 0.00571428571428571,
       "vm_rate": 0.0183333333333333
     },
@@ -150,7 +96,7 @@
       "deliveries": 401,
       "lines_ordered": 6444,
       "lines_with_incidents": 73,
-      "service_rate": 0.988671632526381,
+      "service_rate": 98.87,
       "credit_rate": 0.00473308504034761,
       "vm_rate": 0.00659528243327126
     },
@@ -159,7 +105,7 @@
       "deliveries": 264,
       "lines_ordered": 3490,
       "lines_with_incidents": 69,
-      "service_rate": 0.980229226361032,
+      "service_rate": 98.02,
       "credit_rate": 0.00830945558739255,
       "vm_rate": 0.0114613180515759
     },
@@ -168,7 +114,7 @@
       "deliveries": 208,
       "lines_ordered": 3107,
       "lines_with_incidents": 28,
-      "service_rate": 0.990988091406501,
+      "service_rate": 99.1,
       "credit_rate": 0.00450595429674928,
       "vm_rate": 0.00450595429674928
     },
@@ -186,18 +132,9 @@
       "deliveries": 2788,
       "lines_ordered": 45151,
       "lines_with_incidents": 785,
-      "service_rate": 0.982613895594782,
+      "service_rate": 98.26,
       "credit_rate": 0.00616819118070475,
       "vm_rate": 0.0112179132245133
-    },
-    {
-      "site": "Transport",
-      "deliveries": 0,
-      "lines_ordered": 70,
-      "lines_with_incidents": 70,
-      "service_rate": 0,
-      "credit_rate": 0.00155035325906403,
-      "vm_rate": 0
     }
   ],
   "suppliers": [

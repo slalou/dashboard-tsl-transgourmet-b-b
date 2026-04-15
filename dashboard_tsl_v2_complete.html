@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard TSL V2 - Complète & Détaillée</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="logos.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #003580 0%, #1a4d99 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1900px; margin: 0 auto; }
+        header {
+            background: white;
+            color: #003580;
+            padding: 30px 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 53, 128, 0.2);
+            border-top: 5px solid #FFB81C;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        header h1 { font-size: 2.5em; color: #003580; }
+        .header-logo { display: flex; gap: 20px; align-items: center; }
+        .logo-box { width: 120px; height: 80px; background: transparent; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .controls { background: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 53, 128, 0.1); display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: end; border-left: 5px solid #FFB81C; }
+        .control-group { display: flex; flex-direction: column; gap: 8px; }
+        .control-group label { font-weight: 600; color: #003580; font-size: 0.9em; text-transform: uppercase; }
+        .control-group select, .control-group input { padding: 10px 15px; border: 2px solid #003580; border-radius: 8px; font-size: 1em; cursor: pointer; }
+        .search-box { padding: 10px 15px; border: 2px solid #003580; border-radius: 8px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: linear-gradient(135deg, #003580, #1a4d99); color: white; transition: all 0.3s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 53, 128, 0.3); }
+        .tabs { display: flex; gap: 5px; margin-bottom: 30px; flex-wrap: wrap; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 15px; backdrop-filter: blur(10px); }
+        .tab-btn { padding: 12px 25px; background: rgba(255,255,255,0.2); border: 2px solid transparent; cursor: pointer; font-weight: 600; color: white; transition: all 0.3s; border-radius: 10px; }
+        .tab-btn.active { background: white; color: #003580; border-color: #FFB81C; box-shadow: 0 5px 15px rgba(0, 53, 128, 0.2); }
+        .tab-content { display: none; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 53, 128, 0.2); border-top: 5px solid #FFB81C; }
+        .tab-content.active { display: block; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: linear-gradient(135deg, #f0f5ff, #e8f0ff); padding: 20px; border-radius: 12px; border-left: 4px solid #FFB81C; text-align: center; }
+        .stat-label { color: #666; font-size: 0.9em; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+        .stat-value { font-size: 2.5em; font-weight: bold; color: #003580; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        thead { background: linear-gradient(135deg, #003580 0%, #1a4d99 100%); color: white; }
+        th { padding: 15px; text-align: left; font-weight: 600; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; }
+        tbody tr:hover { background: #f9f9f9; }
+        .search-result { color: #999; text-align: center; padding: 20px; }
+        footer { text-align: center; color: white; margin-top: 40px; padding: 30px; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85em; }
+        .badge-up { background: #ffe5e5; color: #c0392b; }
+        .badge-down { background: #e5f7ff; color: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-logo">
+                <div class="logo-box">
+                    <img id="bbImg" src="" alt="B&B Hotels">
+                </div>
+                <div class="logo-box">
+                    <img id="transImg" src="" alt="Transgourmet">
+                </div>
+            </div>
+            <div>
+                <h1>Dashboard TSL v2</h1>
+                <p style="color: #666;">Analyse Détaillée & Complète | 422 Fournisseurs | 285 Produits | 14 Sites</p>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>📅 Mois de Début</label>
+                <select id="startMonth" onchange="updateData()">
+                    <option value="2026_01">Janvier 2026</option>
+                    <option value="2026_02">Février 2026</option>
+                    <option value="2026_03">Mars 2026</option>
+                    <option value="2026_04" selected>Avril 2026</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>📅 Mois de Fin</label>
+                <select id="endMonth" onchange="updateData()">
+                    <option value="2026_01">Janvier 2026</option>
+                    <option value="2026_02">Février 2026</option>
+                    <option value="2026_03">Mars 2026</option>
+                    <option value="2026_04" selected>Avril 2026</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>🔍 Rechercher</label>
+                <input type="text" id="searchBox" placeholder="Fournisseur, produit, site..." onkeyup="filterTable()">
+            </div>
+            <div class="control-group">
+                <button class="btn" onclick="updateData()">🔄 Actualiser</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'suppliers')">📦 Fournisseurs (422)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'products')">🛍️ Produits (285)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'sites')">📍 Sites (14)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'motifs')">⚠️ Motifs (371)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'stats')">📊 Stats</button>
+        </div>
+
+        <!-- FOURNISSEURS -->
+        <div id="suppliers" class="tab-content active">
+            <h2 style="color: #003580; margin-bottom: 20px;">📦 Fournisseurs (422 Total)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Fournisseurs</div>
+                    <div class="stat-value" id="supplierCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Incidents</div>
+                    <div class="stat-value" id="supplierIncidents">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Moyenne/Fournisseur</div>
+                    <div class="stat-value" id="supplierAvg">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Fournisseur #1</div>
+                    <div class="stat-value" id="supplierTop" style="font-size: 1.2em;">-</div>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="suppliersTable">
+                    <thead>
+                        <tr>
+                            <th>Fournisseur</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suppliersList"></tbody>
+                </table>
+            </div>
+            <div id="suppliersMessage" class="search-result"></div>
+        </div>
+
+        <!-- PRODUITS -->
+        <div id="products" class="tab-content">
+            <h2 style="color: #003580; margin-bottom: 20px;">🛍️ Produits (285 Total)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Produits</div>
+                    <div class="stat-value" id="productCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Incidents</div>
+                    <div class="stat-value" id="productIncidents">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Moyenne/Produit</div>
+                    <div class="stat-value" id="productAvg">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Produit #1</div>
+                    <div class="stat-value" id="productTop" style="font-size: 1.2em;">-</div>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Produit</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsList"></tbody>
+                </table>
+            </div>
+            <div id="productsMessage" class="search-result"></div>
+        </div>
+
+        <!-- SITES -->
+        <div id="sites" class="tab-content">
+            <h2 style="color: #003580; margin-bottom: 20px;">📍 Sites (14 Total)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Sites</div>
+                    <div class="stat-value" id="siteCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Incidents</div>
+                    <div class="stat-value" id="siteIncidents">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Moyenne/Site</div>
+                    <div class="stat-value" id="siteAvg">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Site Critique</div>
+                    <div class="stat-value" id="siteTop" style="font-size: 1.2em;">-</div>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="sitesTable">
+                    <thead>
+                        <tr>
+                            <th>Site</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>Tendance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sitesList"></tbody>
+                </table>
+            </div>
+            <div id="sitesMessage" class="search-result"></div>
+        </div>
+
+        <!-- MOTIFS -->
+        <div id="motifs" class="tab-content">
+            <h2 style="color: #003580; margin-bottom: 20px;">⚠️ Motifs (371 Total)</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Motifs</div>
+                    <div class="stat-value" id="motifCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Incidents</div>
+                    <div class="stat-value" id="motifIncidents">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Motif Principal</div>
+                    <div class="stat-value" id="motifTop" style="font-size: 1.2em;">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">% du Total</div>
+                    <div class="stat-value" id="motifPercent">0%</div>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="motifsTable">
+                    <thead>
+                        <tr>
+                            <th>Motif</th>
+                            <th>Jan</th>
+                            <th>Fév</th>
+                            <th>Mar</th>
+                            <th>Avr</th>
+                            <th>Total</th>
+                            <th>% Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="motifsList"></tbody>
+                </table>
+            </div>
+            <div id="motifsMessage" class="search-result"></div>
+        </div>
+
+        <!-- STATS -->
+        <div id="stats" class="tab-content">
+            <h2 style="color: #003580; margin-bottom: 20px;">📊 Statistiques Globales</h2>
+            <div class="stats-grid" id="globalStats"></div>
+        </div>
+
+        <footer>
+            <p>Dashboard TSL v2.0 - Version Complète | 422 Fournisseurs • 285 Produits • 14 Sites • 371 Motifs</p>
+        </footer>
+    </div>
+
+    <script>
+        let globalData = {};
+
+        async function loadData() {
+            try {
+                const response = await fetch('data_complete.json');
+                globalData = await response.json();
+                updateData();
+            } catch (e) {
+                console.error('Erreur chargement données:', e);
+            }
+        }
+
+        function getMonthValue(month) {
+            const months = { '2026_01': 0, '2026_02': 1, '2026_03': 2, '2026_04': 3 };
+            return months[month] || 0;
+        }
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateData() {
+            if (Object.keys(globalData).length === 0) return;
+
+            const start = document.getElementById('startMonth').value;
+            const end = document.getElementById('endMonth').value;
+            const months = ['2026_01', '2026_02', '2026_03', '2026_04']
+                .slice(getMonthValue(start), getMonthValue(end) + 1);
+
+            updateSuppliers(months);
+            updateProducts(months);
+            updateSites(months);
+            updateMotifs(months);
+            updateStats(months);
+        }
+
+        function updateSuppliers(months) {
+            const tbody = document.getElementById('suppliersList');
+            tbody.innerHTML = '';
+            const msg = document.getElementById('suppliersMessage');
+
+            let suppliers = Object.entries(globalData.suppliers || {}).map(([name, data]) => ({
+                name,
+                months: data,
+                total: months.reduce((sum, m) => sum + (data[m] || 0), 0)
+            })).sort((a, b) => b.total - a.total);
+
+            document.getElementById('supplierCount').textContent = suppliers.length;
+            document.getElementById('supplierIncidents').textContent = 
+                suppliers.reduce((sum, s) => sum + s.total, 0).toLocaleString();
+            document.getElementById('supplierAvg').textContent = 
+                Math.round(suppliers.reduce((sum, s) => sum + s.total, 0) / suppliers.length);
+            document.getElementById('supplierTop').textContent = 
+                suppliers[0]?.name.substring(0, 20) || '-';
+
+            if (suppliers.length === 0) {
+                msg.textContent = 'Aucune donnée';
+                return;
+            }
+            msg.textContent = '';
+
+            suppliers.forEach(s => {
+                const values = months.map(m => s.months[m] || 0);
+                const trend = values[values.length-1] > values[0] ? '↗️ HAUSSE' : '↘️ BAISSE';
+                const cols = months.map(m => `<td>${s.months[m] || 0}</td>`).join('');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${s.name}</strong></td>
+                        ${cols}
+                        <td><strong>${s.total}</strong></td>
+                        <td><span class="badge badge-${values[values.length-1] > values[0] ? 'up' : 'down'}">${trend}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateProducts(months) {
+            const tbody = document.getElementById('productsList');
+            tbody.innerHTML = '';
+            const msg = document.getElementById('productsMessage');
+
+            let products = Object.entries(globalData.products || {}).map(([code, data]) => ({
+                code,
+                name: data.name,
+                months: data.months,
+                total: months.reduce((sum, m) => sum + (data.months[m] || 0), 0)
+            })).sort((a, b) => b.total - a.total);
+
+            document.getElementById('productCount').textContent = products.length;
+            document.getElementById('productIncidents').textContent = 
+                products.reduce((sum, p) => sum + p.total, 0).toLocaleString();
+            document.getElementById('productAvg').textContent = 
+                Math.round(products.reduce((sum, p) => sum + p.total, 0) / products.length);
+            document.getElementById('productTop').textContent = 
+                products[0]?.code || '-';
+
+            if (products.length === 0) {
+                msg.textContent = 'Aucune donnée';
+                return;
+            }
+            msg.textContent = '';
+
+            products.forEach(p => {
+                const values = months.map(m => p.months[m] || 0);
+                const trend = values[values.length-1] > values[0] ? '↗️ HAUSSE' : '↘️ BAISSE';
+                const cols = months.map(m => `<td>${p.months[m] || 0}</td>`).join('');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${p.code}</strong></td>
+                        <td style="font-size: 0.9em;">${p.name.substring(0, 40)}</td>
+                        ${cols}
+                        <td><strong>${p.total}</strong></td>
+                        <td><span class="badge badge-${values[values.length-1] > values[0] ? 'up' : 'down'}">${trend}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateSites(months) {
+            const tbody = document.getElementById('sitesList');
+            tbody.innerHTML = '';
+            const msg = document.getElementById('sitesMessage');
+
+            let sites = Object.entries(globalData.sites || {}).map(([name, data]) => ({
+                name,
+                months: data,
+                total: months.reduce((sum, m) => sum + (data[m] || 0), 0)
+            })).sort((a, b) => b.total - a.total);
+
+            document.getElementById('siteCount').textContent = sites.length;
+            document.getElementById('siteIncidents').textContent = 
+                sites.reduce((sum, s) => sum + s.total, 0).toLocaleString();
+            document.getElementById('siteAvg').textContent = 
+                Math.round(sites.reduce((sum, s) => sum + s.total, 0) / sites.length);
+            document.getElementById('siteTop').textContent = 
+                sites[0]?.name || '-';
+
+            if (sites.length === 0) {
+                msg.textContent = 'Aucune donnée';
+                return;
+            }
+            msg.textContent = '';
+
+            sites.forEach(s => {
+                const values = months.map(m => s.months[m] || 0);
+                const trend = values[values.length-1] > values[0] ? '↗️ HAUSSE' : '↘️ BAISSE';
+                const cols = months.map(m => `<td>${s.months[m] || 0}</td>`).join('');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${s.name}</strong></td>
+                        ${cols}
+                        <td><strong>${s.total}</strong></td>
+                        <td><span class="badge badge-${values[values.length-1] > values[0] ? 'up' : 'down'}">${trend}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateMotifs(months) {
+            const tbody = document.getElementById('motifsList');
+            tbody.innerHTML = '';
+            const msg = document.getElementById('motifsMessage');
+
+            let motifs = Object.entries(globalData.motifs || {}).map(([name, data]) => ({
+                name,
+                months: data,
+                total: months.reduce((sum, m) => sum + (data[m] || 0), 0)
+            })).sort((a, b) => b.total - a.total);
+
+            const totalIncidents = motifs.reduce((sum, m) => sum + m.total, 0);
+            document.getElementById('motifCount').textContent = motifs.length;
+            document.getElementById('motifIncidents').textContent = totalIncidents.toLocaleString();
+            document.getElementById('motifTop').textContent = 
+                motifs[0]?.name.substring(0, 20) || '-';
+            document.getElementById('motifPercent').textContent = 
+                motifs.length > 0 ? ((motifs[0].total / totalIncidents) * 100).toFixed(1) + '%' : '0%';
+
+            if (motifs.length === 0) {
+                msg.textContent = 'Aucune donnée';
+                return;
+            }
+            msg.textContent = '';
+
+            motifs.forEach(m => {
+                const cols = months.map(mo => `<td>${m.months[mo] || 0}</td>`).join('');
+                const percent = ((m.total / totalIncidents) * 100).toFixed(1);
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${m.name}</strong></td>
+                        ${cols}
+                        <td><strong>${m.total}</strong></td>
+                        <td><strong>${percent}%</strong></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateStats(months) {
+            const stats = document.getElementById('globalStats');
+            const suppliers = Object.entries(globalData.suppliers || {}).length;
+            const products = Object.entries(globalData.products || {}).length;
+            const sites = Object.entries(globalData.sites || {}).length;
+            const motifs = Object.entries(globalData.motifs || {}).length;
+
+            stats.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Fournisseurs Totaux</div>
+                    <div class="stat-value">${suppliers}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Produits Totaux</div>
+                    <div class="stat-value">${products}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Sites Totaux</div>
+                    <div class="stat-value">${sites}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Motifs Totaux</div>
+                    <div class="stat-value">${motifs}</div>
+                </div>
+            `;
+        }
+
+        function filterTable() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+            document.querySelectorAll('table tbody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof LOGOS !== 'undefined') {
+                document.getElementById('bbImg').src = LOGOS.bb_hotels;
+                document.getElementById('transImg').src = LOGOS.transgourmet;
+            }
+            loadData();
+        });
+    </script>
+</body>
+</html>
